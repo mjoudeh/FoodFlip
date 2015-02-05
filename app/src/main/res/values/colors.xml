@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="ff_blue">#2B9FC6</color>
+    <color name="ff_yellow">#F0C320</color>
+    <color name="ff_green">#8DC641</color>
+    <color name="ff_lightGreen">#C7E852</color>
+    <color name="ff_brown">#803C00</color>
+    <color name="ff_lightBrown">#E59035</color>
+    <color name="ff_red">#EB3333</color>
+
+</resources>

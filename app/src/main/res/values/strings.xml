@@ -3,6 +3,10 @@
 
     <string name="app_name">Food Flip</string>
     <string name="logo_description">The Food Flip logo</string>
+    <string name="searchButton_description">Search Button</string>
+    <string name="submitButton_description">Submit Button</string>
+    <string name="upVoteButton_description">Up Vote</string>
+    <string name="downVoteButton_description">Down Vote</string>
     <string name="action_settings">Settings</string>
 
 </resources>
