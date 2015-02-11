@@ -1,7 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ff_blue">
+    android:background="@color/ff_blue"
+    android:weightSum="1"
+	tools:context=".SubmitScreenActivity">
 
-</LinearLayout>
+
+    <ImageButton
+        android:id="@+id/account_button_submit_form"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:height="50dp"
+		android:width="80dp"
+        android:background="@color/ff_blue"
+        android:src="@drawable/account_button"
+        android:focusableInTouchMode="false"
+        android:layout_gravity="right"
+        android:adjustViewBounds="true"
+        android:layout_weight="0.5"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:scaleType="fitCenter" />
+
+    <EditText
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+        android:padding="15dip"
+		android:hint="Type"
+		android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/editText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp" />
+	<EditText
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+        android:padding="15dip"
+		android:hint="Description"
+		android:singleLine="false"
+		android:lines="5"
+		android:background="@drawable/rounded_edittext"
+        android:id="@+id/editText"
+        android:layout_below="@+id/account_button_submit_form"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp" />
+
+    <ImageButton
+        android:id="@+id/back_button_submit_form"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp"
+        android:background="@color/ff_blue"
+        android:src="@drawable/back_button"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:padding="5dp" />
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:id="@+id/logo_submit_form"
+        android:src="@drawable/logo"
+        android:layout_alignBottom="@+id/back_button_submit_form"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/submit_button_submit_form"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/submit_button2"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:background="@color/ff_blue"
+        android:layout_margin="10dp" />
+
+</RelativeLayout>

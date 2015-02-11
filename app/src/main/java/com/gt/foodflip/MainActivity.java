@@ -1,7 +1,9 @@
 package com.gt.foodflip;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +55,8 @@ public class MainActivity extends ActionBarActivity {
 
     View.OnClickListener submitScreen = new View.OnClickListener() {
         public void onClick(View v) {
-            setContentView(R.layout.activity_submit);
+            Intent submitScreen = new Intent(getApplicationContext(), SubmitScreenActivity.class);
+            startActivity(submitScreen);
         }
     };
 }
