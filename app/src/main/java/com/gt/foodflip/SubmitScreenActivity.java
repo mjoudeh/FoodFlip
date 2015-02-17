@@ -60,23 +60,14 @@ public class SubmitScreenActivity extends Activity {
             RequestParams params = new RequestParams();
             params.put("FoodType", foodT);
             params.put("FoodDescription", foodD);
-            // Show ProgressBar
-            //prgDialog.show();
-            // Make Http call to getusers.php
+            // Make Http call to insertentry.php
             client.post("http://128.61.126.152/foodflip/insertentry.php", params, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
-                    // Hide ProgressBar
-                    //prgDialog.hide();
-                    // Update SQLite DB with response sent by getusers.php
-                    //updateSQLite(response);
                 }
                 // When error occured
                 @Override
                 public void onFailure(int statusCode, Throwable error, String content) {
-                    // TODO Auto-generated method stub
-                    // Hide ProgressBar
-                    //prgDialog.hide();
                     if (statusCode == 404) {
                         Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
                     } else if (statusCode == 500) {
