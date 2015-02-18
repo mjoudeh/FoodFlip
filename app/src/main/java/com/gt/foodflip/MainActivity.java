@@ -1,6 +1,5 @@
 package com.gt.foodflip;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -49,7 +48,8 @@ public class MainActivity extends ActionBarActivity {
 
     View.OnClickListener searchScreen = new View.OnClickListener() {
         public void onClick(View v) {
-            setContentView(R.layout.activity_search);
+            Intent searchScreen = new Intent(getApplicationContext(), SearchScreenActivity.class);
+            startActivity(searchScreen);
         }
     };
 
