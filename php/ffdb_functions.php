@@ -37,7 +37,7 @@ class FFDB_Functions {
      * Getting all entries
      */
     public function getAllEntries() {
-        $result = mysql_query("select * FROM food_entries");
+        $result = mysql_query("SELECT * FROM food_entries");
         return $result;
     }
 	/**

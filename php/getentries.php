@@ -1,7 +1,7 @@
 <?php
     include_once 'ffdb_functions.php';
     $ffdb = new FFDB_Functions();
-    $entries = $db->getRowCount();
+    $entries = $ffdb->getAllEntries();
 	$a = array();
 	$b = array();
     if ($entries != false){
