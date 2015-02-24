@@ -8,5 +8,177 @@
     <string name="upVoteButton_description">Up Vote</string>
     <string name="downVoteButton_description">Down Vote</string>
     <string name="action_settings">Settings</string>
+    <string-array name="list_of_buildings">
+        <item>Amphitheater</item>
+        <item>CRC Parking Deck</item>
+        <item>Campus Recreation Center (CRC)</item>
+        <item>Campus Recreation Center (CRC)</item>
+        <item>Central Receiving-Property Control</item>
+        <item>Couch Building</item>
+        <item>Curran Street Parking Deck</item>
+        <item>Facilities Area I Maintenance Building</item>
+        <item>Ferst Center For The Arts</item>
+        <item>Groseclose Building</item>
+        <item>ISYE Annex</item>
+        <item>Institute of Paper Science And Technology</item>
+        <item>Instructional Center</item>
+        <item>Joseph B. Whitehead Student Health Center</item>
+        <item>Kessler Campanile</item>
+        <item>Love Manufacturing Building</item>
+        <item>Manufacturing Related Disciplines Complex (MRDC)</item>
+        <item>Manufacturing Research Center (MARC)</item>
+        <item>Outdoor Pool Bubble</item>
+        <item>SAC Fields Roe Stamps</item>
+        <item>Southern Regional Education Board</item>
+        <item>Student Center Commons</item>
+        <item>Student Center Parking Booth</item>
+        <item>Student Center Parking Deck</item>
+        <item>Student Services Building</item>
+        <item>WREK Transmitter And Tower</item>
+        <item>Wenn Student Center</item>
+        <item>Woodruff Residence Hall</item>
+        <item>430 North</item>
+        <item>430 South</item>
+        <item>490 10th Street</item>
+        <item>Baker</item>
+        <item>Beringause Building</item>
+        <item>Bill Moore Tennis Center</item>
+        <item>Centennial Research Building</item>
+        <item>Facilities Garage/Warehouse</item>
+        <item>Facilities Operations Storage</item>
+        <item>Facilities Waste Storage</item>
+        <item>Ford Environmental Science &amp; Technology</item>
+        <item>Griffin Track</item>
+        <item>Molecular Science And Engineering Building</item>
+        <item>Neely Research Center</item>
+        <item>North Campus Parking Deck</item>
+        <item>Old Environmental House</item>
+        <item>Parker H. Petit Biotechnology Building</item>
+        <item>President\'s House</item>
+        <item>Rose Bowl Field</item>
+        <item>Rose Bowl Field Storage</item>
+        <item>Russ Chandler Stadium</item>
+        <item>CStoreroom Annex</item>
+        <item>Suddath Courtyard</item>
+        <item>Tenth Street Chiller Plant</item>
+        <item>U.A. Whitaker Biomedical Engineering</item>
+        <item>Architecture (East)</item>
+        <item>Architecture (West)</item>
+        <item>AArchitecture Annex</item>
+        <item>Boggs Chemistry Building</item>
+        <item>Bunger-Henry Building</item>
+        <item>Cherry L. Emerson Building</item>
+        <item>Computing, College of</item>
+        <item>Howey (Physics) Building</item>
+        <item>Klaus Advanced Computing</item>
+        <item>Lamar Allen Sustainable Education</item>
+        <item>Mason (CE) Building</item>
+        <item>Nanotechnology Research Building</item>
+        <item>Pettit Microelectronics Research Center (MIRC)</item>
+        <item>Van Leer Building</item>
+        <item>A. French Building</item>
+        <item>Alpha Delta Chi</item>
+        <item>Alpha Delta Pi</item>
+        <item>Alumni House</item>
+        <item>Army Office</item>
+        <item>Bill Moore Student Success Center</item>
+        <item>Bobby Dodd Stadium</item>
+        <item>Brittain  Dining Hall</item>
+        <item>Burge Parking Deck</item>
+        <item>Calculator</item>
+        <item>Callaway Plaza</item>
+        <item>Carnegie Building</item>
+        <item>Chapin Building</item>
+        <item>Coon Building</item>
+        <item>Crosland Tower</item>
+        <item>D. M. Smith</item>
+        <item>Daniel Lab Addition</item>
+        <item>Daniel Laboratory</item>
+        <item>Edge Intercollegiate Athletic Center</item>
+        <item>Engineering Science And Mechanics Building</item>
+        <item>Guggenheim Building</item>
+        <item>Harrison Square</item>
+        <item>Hinman Highbay Building</item>
+        <item>Holland Heating And Cooling Plant</item>
+        <item>Homer Rice Center For Sports Performance</item>
+        <item>Lettie Pate Whitehead Evans Administration Building</item>
+        <item>Lyman Hall</item>
+        <item>Mechanical Engineering Research Building (Tin)</item>
+        <item>Montgomery Knight Aerospace Engineering (SST2)</item>
+        <item>Navy ROTC Armory</item>
+        <item>Neetrac Cable Aging Chamber</item>
+        <item>Neetrac High Voltage Test Lab</item>
+        <item>Neetrac Mat Test Lab</item>
+        <item>Neetrac Mech Test Lab</item>
+        <item>North Avenue Apartments</item>
+        <item>North Avenue Apartments South Parking Deck</item>
+        <item>Old Civil Engineering Building</item>
+        <item>Paul Mayer Memorial Gardens</item>
+        <item>Peters Parking Deck</item>
+        <item>Price Gilbert Memorial Library</item>
+        <item>Pumping Station</item>
+        <item>CRich (Old)</item>
+        <item>FRich Chiller Plant</item>
+        <item>DRich Computer Center</item>
+        <item>Savant Building</item>
+        <item>Skiles Classroom Building</item>
+        <item>Swann Building</item>
+        <item>AThomas P. Hinman</item>
+        <item>University Apartments</item>
+        <item>W.C. &amp; Sarah Bradley</item>
+        <item>Wardlaw Building</item>
+        <item>Weber Space Science &amp; Technology (SST1) Building</item>
+        <item>Weber Space Science &amp; Technology (SST3) Building</item>
+        <item>14th Street Parking Deck</item>
+        <item>1594 Marietta Blvd</item>
+        <item>755 Marietta Street</item>
+        <item>756 West Peachtree Street</item>
+        <item>781 Marietta Street</item>
+        <item>811 Marietta Street</item>
+        <item>828 West Peachtree Street</item>
+        <item>830 West Peachtree Street</item>
+        <item>831 Marietta Street</item>
+        <item>845 Marietta Street</item>
+        <item>Academy of Medicine</item>
+        <item>Advanced Wood Products Lab</item>
+        <item>Alexander Memorial Coliseum</item>
+        <item>Broadband Institute Residential Laboratory</item>
+        <item>Business Services</item>
+        <item>C-NES Lab</item>
+        <item>CEISMC</item>
+        <item>Centergy One/ATDC</item>
+        <item>Cobb County Research Facility Building 1</item>
+        <item>Cobb County Research Facility Building 2</item>
+        <item>Cobb County Research Facility Building 3</item>
+        <item>Cobb County Research Facility Building 4</item>
+        <item>Cobb County Research Facility Building 5</item>
+        <item>Cobb County Research Facility Building 6</item>
+        <item>Cobb County Research Facility Building 7</item>
+        <item>Cobb County Research Tower</item>
+        <item>Economic Development</item>
+        <item>Electrical Substation Control House</item>
+        <item>Ethel Street Warehouse</item>
+        <item>Facilities Administration Building</item>
+        <item>Georgia Tech Research Institute (GTRI)</item>
+        <item>Global Learning Center</item>
+        <item>Human Resources (500 Tech Pkwy)</item>
+        <item>James K. Luck Jr.</item>
+        <item>Management</item>
+        <item>Nara 645 Northside</item>
+        <item>Nara Combustion Laboratory</item>
+        <item>Nara Food Processing Technology Research</item>
+        <item>Nara Structures Lab</item>
+        <item>Nara Tech Way Bldg</item>
+        <item>O\'Keefe Building</item>
+        <item>O\'Keefe Custodial</item>
+        <item>O\'Keefe Gym</item>
+        <item>O\'Keefe Storage Facility</item>
+        <item>Paul H. Heffernan House</item>
+        <item>R. Kirk Landon Learning Center</item>
+        <item>Research Administration Building</item>
+        <item>Strong Street Gatehouse</item>
+        <item>Technology Square Parking Deck</item>
+        <item>Technology Square Research</item>
+    </string-array>
 
 </resources>

@@ -1,17 +1,26 @@
 package com.gt.foodflip;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 
 public class MainActivity extends ActionBarActivity {
+    ImageButton main_screen_search;
+    ImageButton main_screen_submit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        main_screen_search = (ImageButton) findViewById(R.id.main_screen_search);
+        main_screen_submit = (ImageButton) findViewById(R.id.main_screen_submit);
+        main_screen_search.setOnClickListener(searchScreen);
+        main_screen_submit.setOnClickListener(submitScreen);
     }
 
 
@@ -36,4 +45,18 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    View.OnClickListener searchScreen = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent searchScreen = new Intent(getApplicationContext(), SearchScreenActivity.class);
+            startActivity(searchScreen);
+        }
+    };
+
+    View.OnClickListener submitScreen = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent submitScreen = new Intent(getApplicationContext(), SubmitScreenActivity.class);
+            startActivity(submitScreen);
+        }
+    };
 }
