@@ -6,7 +6,7 @@
 2. In XAMPP, start Apache and MySQL.
 3. Log in to phpMyAdmin by navigating to http://localhost/phpmyadmin/ in your browser.
 4. Create a database in phpMyAdmin named "ffdb".
-5. Create a table in ffdb with three columns:
+5. Create a table in ffdb named *food_entries* with three columns:
 
 	* FoodType (varchar(255))
 	* FoodDescription (varchar(255))
