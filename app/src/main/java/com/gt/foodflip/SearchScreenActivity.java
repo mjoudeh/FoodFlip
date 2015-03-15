@@ -3,10 +3,9 @@ package com.gt.foodflip;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -28,27 +27,38 @@ public class SearchScreenActivity extends Activity {
     ImageButton back_button_search_form;
     ImageButton account_button_search_form;
     ListView listView;
-    ArrayList<String> httpResponse = new ArrayList<>();
+    ArrayList<ListModel> httpResponse = new ArrayList<>();
+    CustomAdapter customAdapter;
+    public SearchScreenActivity customListView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         final Context context = this;
-        // Get ListView object from xml
+        customListView = this;
+
         listView = (ListView) findViewById(R.id.entries_list_view);
         back_button_search_form = (ImageButton) findViewById(R.id.back_button_search_form);
         account_button_search_form = (ImageButton) findViewById(R.id.account_button_search_form);
 
         back_button_search_form.setOnClickListener(mainScreen);
 
+        getFoodEntries(context);
+
+        Resources resources = getResources();
+        customAdapter = new CustomAdapter(customListView, httpResponse, resources);
+        listView.setAdapter(customAdapter);
+    }
+
+    public void getFoodEntries(final Context context) {
         AsyncHttpClient client = new AsyncHttpClient();
 
         // Http Request Params Object
         RequestParams params = new RequestParams();
 
         // Make Http call to insertentry.php
-        client.post("http://128.61.119.32/foodflip/getentries.php", params, new AsyncHttpResponseHandler() {
+        client.post("http://192.168.1.6/foodflip/getentries.php", params, new AsyncHttpResponseHandler() {
 
             @Override
             public void onSuccess(String response) {
@@ -56,8 +66,11 @@ public class SearchScreenActivity extends Activity {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
+                        final ListModel entry = new ListModel();
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        httpResponse.add(obj.getString("foodType"));
+
+                        entry.setType(obj.getString("foodType"));
+                        httpResponse.add(entry);
                     }
                 } catch (JSONException e) {
                     System.out.println("Error parsing food entry data: " + e.getMessage());
@@ -69,7 +82,7 @@ public class SearchScreenActivity extends Activity {
                 // Second parameter - Layout for the row
                 // Third parameter - ID of the TextView to which the data is written
                 // Forth - the Array of data
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+               /* ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                         android.R.layout.simple_list_item_1, android.R.id.text1, httpResponse);
 
 
@@ -96,7 +109,7 @@ public class SearchScreenActivity extends Activity {
 
                     }
 
-                });
+                });*/
 
             }
 
@@ -123,5 +136,22 @@ public class SearchScreenActivity extends Activity {
             startActivity(mainScreen);
         }
     };
+
+    /*****************  This function used by adapter ****************/
+    public void onItemClick(int mPosition)
+    {
+        ListModel tempValues = (ListModel) httpResponse.get(mPosition);
+
+
+        // SHOW ALERT
+
+        /*Toast.makeText(CustomListView, ""+tempValues.getCompanyName()
+                        +"
+                Image:"+tempValues.getImage()
+            +"
+        Url:"+tempValues.getUrl(),
+        Toast.LENGTH_LONG)
+        .show();*/
+    }
 
 }

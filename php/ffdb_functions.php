@@ -22,9 +22,9 @@ class FFDB_Functions {
      * Storing new user
      * returns user details
      */
-    public function storeEntry($Entry) {
+    public function storeEntry($building, $location, $foodCategory, $foodType, $foodDescription) {
         // Insert entry into database
-        $result = mysql_query("INSERT INTO food_entries(FoodType) VALUES('$Entry')");
+        $result = mysql_query("INSERT INTO food_entries(Building, Location, FoodCategory, FoodType, FoodDescription) VALUES('$building', '$location', '$foodCategory', '$foodType', '$foodDescription')");
 		
         if ($result) {
 			return true;
