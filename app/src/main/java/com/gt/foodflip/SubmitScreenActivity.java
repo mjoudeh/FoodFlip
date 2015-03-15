@@ -9,6 +9,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -21,8 +22,10 @@ public class SubmitScreenActivity extends Activity {
     ImageButton back_button_submit_form;
     ImageButton submit_button_submit_form;
     ImageButton account_button_submit_form;
+    ToggleButton food_truck_toggle_button;
+    ToggleButton delivery_toggle_button;
+    ToggleButton other_toggle_button;
     EditText text_description;
-    EditText text_type;
     private AutoCompleteTextView buildingsList;
 
     @Override
@@ -39,10 +42,16 @@ public class SubmitScreenActivity extends Activity {
         back_button_submit_form = (ImageButton) findViewById(R.id.back_button_submit_form);
         submit_button_submit_form = (ImageButton) findViewById(R.id.submit_button_submit_form);
         account_button_submit_form = (ImageButton) findViewById(R.id.account_button_submit_form);
+        food_truck_toggle_button = (ToggleButton) findViewById(R.id.food_truck_toggle_button);
+        delivery_toggle_button = (ToggleButton) findViewById(R.id.delivery_toggle_button);
+        other_toggle_button = (ToggleButton) findViewById(R.id.other_toggle_button);
         text_description = (EditText) findViewById(R.id.text_description);
-        text_type = (EditText) findViewById(R.id.text_type);
+
         back_button_submit_form.setOnClickListener(mainScreen);
         submit_button_submit_form.setOnClickListener(submitFood);
+        food_truck_toggle_button.setOnClickListener(toggleCategory);
+        delivery_toggle_button.setOnClickListener(toggleCategory);
+        other_toggle_button.setOnClickListener(toggleCategory);
 
         buildingsList.setAdapter(adapter);
     }
@@ -54,6 +63,31 @@ public class SubmitScreenActivity extends Activity {
         }
     };
 
+    View.OnClickListener toggleCategory = new View.OnClickListener() {
+        public void onClick(View v) {
+            ToggleButton t = (ToggleButton) v;
+
+            if (!t.isChecked()) return;
+
+            switch(t.getText().toString()) {
+                case "Food Truck":
+                    delivery_toggle_button.setChecked(false);
+                    other_toggle_button.setChecked(false);
+                    break;
+                case "Delivery":
+                    food_truck_toggle_button.setChecked(false);
+                    other_toggle_button.setChecked(false);
+                    break;
+                case "Other":
+                    food_truck_toggle_button.setChecked(false);
+                    delivery_toggle_button.setChecked(false);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     View.OnClickListener submitFood = new View.OnClickListener() {
         public void onClick(View v) {
         // Create AsycHttpClient object
@@ -61,7 +95,6 @@ public class SubmitScreenActivity extends Activity {
 
         // Http Request Params Object
         RequestParams params = new RequestParams();
-        params.put("FoodType", text_type.getText().toString());
         params.put("FoodDescription", text_description.getText().toString());
         // Make Http call to insertentry.php
         client.post("http://128.61.119.32/foodflip/insertentry.php", params, new AsyncHttpResponseHandler() {

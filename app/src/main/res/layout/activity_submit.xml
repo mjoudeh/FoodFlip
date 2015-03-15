@@ -34,43 +34,44 @@
         android:layout_below="@+id/back_button_submit_form"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_alignLeft="@+id/text_type"
-        android:layout_alignStart="@+id/text_type"
-        android:layout_alignRight="@+id/text_type"
-        android:layout_alignEnd="@+id/text_type"
         android:background="@drawable/rounded_edittext"
-        android:padding="15dp" />
+        android:padding="15dp"
+        android:layout_alignLeft="@+id/text_category"
+        android:layout_alignStart="@+id/text_category"
+        android:layout_alignRight="@+id/text_category"
+        android:layout_alignEnd="@+id/text_category" />
+
 
     <EditText
-        android:id="@+id/text_type"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-        android:padding="15dip"
-		android:hint="Type"
-		android:background="@drawable/rounded_edittext"
-        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_location"
+        android:background="@drawable/rounded_edittext"
+        android:padding="15dp"
+        android:hint="Location (room #, area, etc.)"
         android:layout_below="@+id/autocompletetext_building"
-        android:layout_alignRight="@+id/text_description"
-        android:layout_alignEnd="@+id/text_description"
-        android:layout_alignLeft="@+id/back_button_submit_form"
-        android:layout_alignStart="@+id/back_button_submit_form" />
+        android:layout_alignLeft="@+id/autocompletetext_building"
+        android:layout_alignStart="@+id/autocompletetext_building"
+        android:layout_alignRight="@+id/text_category"
+        android:layout_alignEnd="@+id/text_category" />
 
-	<EditText
+    <EditText
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
         android:padding="15dip"
-		android:hint="Description"
+		android:hint="Description (optional)"
 		android:singleLine="false"
 		android:lines="5"
 		android:background="@drawable/rounded_edittext"
         android:id="@+id/text_description"
         android:textAlignment="textStart"
         android:gravity="start"
-        android:layout_below="@+id/text_type"
+        android:layout_above="@+id/submit_button_submit_form"
+        android:layout_alignLeft="@+id/submit_button_submit_form"
+        android:layout_alignStart="@+id/submit_button_submit_form"
         android:layout_alignRight="@+id/account_button_submit_form"
         android:layout_alignEnd="@+id/account_button_submit_form"
-        android:layout_alignLeft="@+id/back_button_submit_form"
-        android:layout_alignStart="@+id/back_button_submit_form" />
+        android:layout_below="@+id/text_type" />
 
     <ImageButton
         android:id="@+id/back_button_submit_form"
@@ -105,5 +106,167 @@
         android:adjustViewBounds="true"
         android:background="@color/ff_blue"
         android:layout_margin="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category (choose one)"
+        android:id="@+id/text_category"
+        android:height="85dp"
+        android:background="@drawable/rounded_edittext"
+        android:padding="15dip"
+        android:gravity="top|center"
+        android:textStyle="italic"
+        android:textSize="18dp"
+        android:layout_below="@+id/text_location"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignRight="@+id/text_type"
+        android:layout_alignEnd="@+id/text_type"
+        android:layout_alignLeft="@+id/text_type"
+        android:layout_alignStart="@+id/text_type" />
+
+    <ToggleButton
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Food Truck"
+        android:textColor="@drawable/text_color_category"
+        android:id="@+id/food_truck_toggle_button"
+        android:layout_alignBottom="@+id/text_category"
+        android:layout_alignLeft="@+id/text_category"
+        android:layout_alignStart="@+id/text_category"
+        android:background="@null"
+        android:textOff="Food Truck"
+        android:textOn="Food Truck"
+        android:layout_marginLeft="20dp" />
+
+    <ToggleButton
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Delivery"
+        android:textColor="@drawable/text_color_category"
+        android:id="@+id/delivery_toggle_button"
+        android:layout_alignBottom="@+id/text_category"
+        android:layout_toRightOf="@+id/food_truck_toggle_button"
+        android:layout_toEndOf="@+id/food_truck_toggle_button"
+        android:background="@null"
+        android:textOff="Delivery"
+        android:textOn="Delivery" />
+
+    <ToggleButton
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Other"
+        android:textColor="@drawable/text_color_category"
+        android:id="@+id/other_toggle_button"
+        android:layout_alignBottom="@+id/text_category"
+        android:layout_toRightOf="@+id/delivery_toggle_button"
+        android:layout_toEndOf="@+id/delivery_toggle_button"
+        android:background="@null"
+        android:textOff="Other"
+        android:textOn="Other"
+        android:layout_marginRight="35dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="130dp"
+        android:text="Type"
+        android:id="@+id/text_type"
+        android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/text_category"
+        android:layout_alignLeft="@+id/text_description"
+        android:layout_alignRight="@+id/text_description"
+        android:layout_marginBottom="5dp"
+        android:gravity="top|center"
+        android:textStyle="italic"
+        android:textSize="18dp"
+        android:padding="15dp" />
+
+    <ToggleButton
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Pizza"
+        android:textColor="@drawable/text_color_type"
+        android:id="@+id/pizza_toggle_button"
+        android:layout_alignTop="@+id/text_type"
+        android:layout_alignLeft="@+id/text_type"
+        android:layout_alignStart="@+id/text_type"
+        android:layout_marginTop="35dp"
+        android:background="@null"
+        android:textOff="Pizza"
+        android:textOn="Pizza"
+        android:layout_marginLeft="20dp" />
+
+    <ToggleButton
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Wings"
+        android:textColor="@drawable/text_color_type"
+        android:id="@+id/wings_toggle_button"
+        android:layout_alignTop="@+id/pizza_toggle_button"
+        android:layout_toRightOf="@+id/pizza_toggle_button"
+        android:layout_toEndOf="@+id/pizza_toggle_button"
+        android:background="@null"
+        android:textOff="Wings"
+        android:textOn="Wings" />
+
+    <ToggleButton
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Baked Goods"
+        android:textColor="@drawable/text_color_type"
+        android:id="@+id/baked_goods_toggle_button"
+        android:layout_alignTop="@+id/wings_toggle_button"
+        android:layout_toRightOf="@+id/wings_toggle_button"
+        android:background="@null"
+        android:textOff="Baked Goods"
+        android:textOn="Baked Goods" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sandwiches"
+        android:textColor="@drawable/text_color_type"
+        android:id="@+id/sandwiches_toggle_button"
+        android:layout_below="@+id/pizza_toggle_button"
+        android:layout_alignLeft="@+id/text_type"
+        android:layout_alignStart="@+id/text_type"
+        android:background="@null"
+        android:textOff="Sandwiches"
+        android:textOn="Sandwiches"
+        android:layout_toLeftOf="@+id/drinks_toggle_button"
+        android:layout_toStartOf="@+id/drinks_toggle_button"
+        android:layout_marginLeft="20dp" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Drinks"
+        android:textColor="@drawable/text_color_type"
+        android:id="@+id/drinks_toggle_button"
+        android:layout_below="@+id/wings_toggle_button"
+        android:layout_alignLeft="@+id/wings_toggle_button"
+        android:layout_alignStart="@+id/wings_toggle_button"
+        android:background="@null"
+        android:textOff="Drinks"
+        android:layout_toLeftOf="@+id/other_type_toggle_button"
+        android:layout_toStartOf="@+id/other_type_toggle_button"
+        android:textOn="Drinks" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Other"
+        android:textColor="@drawable/text_color_type"
+        android:id="@+id/other_type_toggle_button"
+        android:layout_below="@+id/baked_goods_toggle_button"
+        android:layout_alignLeft="@+id/baked_goods_toggle_button"
+        android:layout_alignStart="@+id/baked_goods_toggle_button"
+        android:background="@null"
+        android:textOff="Other"
+        android:textOn="Other"
+        android:layout_alignRight="@+id/baked_goods_toggle_button"
+        android:layout_alignEnd="@+id/baked_goods_toggle_button" />
+
 
 </RelativeLayout>
