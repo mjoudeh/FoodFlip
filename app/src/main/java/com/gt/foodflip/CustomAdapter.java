@@ -78,7 +78,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder.location = (TextView) vi.findViewById(R.id.location);
             holder.foodCategory = (TextView) vi.findViewById(R.id.food_category);
             holder.foodType = (TextView) vi.findViewById(R.id.food_type);
-            holder.foodDescription = (TextView) vi.findViewById(R.id.food_description);
+            //holder.foodDescription = (TextView) vi.findViewById(R.id.food_description);
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag(holder);
@@ -99,7 +99,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder.location.setText(tempValues.getLocation());
             holder.foodCategory.setText(tempValues.getCategory());
             holder.foodType.setText(tempValues.getType());
-            holder.foodDescription.setText(tempValues.getDescription());
+            //holder.foodDescription.setText(tempValues.getDescription());
 
             /******** Set Item Click Listner for LayoutInflater for each row *******/
 

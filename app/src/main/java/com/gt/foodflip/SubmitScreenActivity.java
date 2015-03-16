@@ -79,26 +79,26 @@ public class SubmitScreenActivity extends Activity {
 
     View.OnClickListener toggleCategory = new View.OnClickListener() {
         public void onClick(View v) {
-            ToggleButton t = (ToggleButton) v;
+        ToggleButton t = (ToggleButton) v;
 
-            if (!t.isChecked()) return;
+        if (!t.isChecked()) return;
 
-            switch(t.getText().toString()) {
-                case "Food Truck":
-                    delivery_toggle_button.setChecked(false);
-                    other_toggle_button.setChecked(false);
-                    break;
-                case "Delivery":
-                    food_truck_toggle_button.setChecked(false);
-                    other_toggle_button.setChecked(false);
-                    break;
-                case "Other":
-                    food_truck_toggle_button.setChecked(false);
-                    delivery_toggle_button.setChecked(false);
-                    break;
-                default:
-                    break;
-            }
+        switch(t.getText().toString()) {
+            case "Food Truck":
+                delivery_toggle_button.setChecked(false);
+                other_toggle_button.setChecked(false);
+                break;
+            case "Delivery":
+                food_truck_toggle_button.setChecked(false);
+                other_toggle_button.setChecked(false);
+                break;
+            case "Other":
+                food_truck_toggle_button.setChecked(false);
+                delivery_toggle_button.setChecked(false);
+                break;
+            default:
+                break;
+        }
         }
     };
 
@@ -121,7 +121,8 @@ public class SubmitScreenActivity extends Activity {
             params.put("FoodType", types);
             params.put("FoodDescription", text_description.getText().toString());
             // Make Http call to insertentry.php
-            client.post("http://192.168.1.6/foodflip/insertentry.php", params, new AsyncHttpResponseHandler() {
+            client.post("http://192.168.1.6/foodflip/insertentry.php", params,
+                    new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
                     System.out.println(response);
@@ -129,14 +130,17 @@ public class SubmitScreenActivity extends Activity {
                 // When error occured
                 @Override
                 public void onFailure(int statusCode, Throwable error, String content) {
-                    if (statusCode == 404) {
-                        Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
-                    } else if (statusCode == 500) {
-                        Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet]",
+                    if (statusCode == 404)
+                        Toast.makeText(getApplicationContext(), "Requested resource not found",
                                 Toast.LENGTH_LONG).show();
-                    }
+                    else if (statusCode == 500)
+                        Toast.makeText(getApplicationContext(),
+                                "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(getApplicationContext(), "Unexpected Error occcured!" +
+                                        " [Most common Error: Device might not be connected" +
+                                        " to Internet]",
+                                Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -164,6 +168,10 @@ public class SubmitScreenActivity extends Activity {
         return stringBuilder.toString();
     }
 
+    /*
+     * This method makes sure that all inputs are not empty.
+     * TODO: display a message on false
+     */
     public boolean validateInput() {
         if (buildingsList.getText().toString() == "Building" ||
                 buildingsList.getText().toString() == null ||
