@@ -62,55 +62,22 @@ public class SearchScreenActivity extends Activity {
 
             @Override
             public void onSuccess(String response) {
-                // Defined Array values to show in ListView
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         final ListModel entry = new ListModel();
                         JSONObject obj = jsonArray.getJSONObject(i);
-
+                        entry.setBuilding(obj.getString("building"));
+                        entry.setLocation(obj.getString("location"));
+                        entry.setCategory(obj.getString("foodCategory"));
                         entry.setType(obj.getString("foodType"));
+                        entry.setDescription(obj.getString("foodDescription"));
                         httpResponse.add(entry);
                     }
                 } catch (JSONException e) {
                     System.out.println("Error parsing food entry data: " + e.getMessage());
                     return;
                 }
-
-                // Define a new Adapter
-                // First parameter - Context
-                // Second parameter - Layout for the row
-                // Third parameter - ID of the TextView to which the data is written
-                // Forth - the Array of data
-               /* ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                        android.R.layout.simple_list_item_1, android.R.id.text1, httpResponse);
-
-
-                // Assign adapter to ListView
-                listView.setAdapter(adapter);
-
-                // ListView Item Click Listener
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
-
-                        // ListView Clicked item index
-                        int itemPosition = position;
-
-                        // ListView Clicked item value
-                        String itemValue = (String) listView.getItemAtPosition(position);
-
-                        // Show Alert
-                        Toast.makeText(getApplicationContext(),
-                                "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-                                .show();
-
-                    }
-
-                });*/
-
             }
 
             // When error occured

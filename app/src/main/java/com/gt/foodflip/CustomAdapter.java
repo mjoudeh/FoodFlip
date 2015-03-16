@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -54,12 +53,11 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
     /********* Create a holder Class to contain inflated xml file elements *********/
     public static class ViewHolder {
-
-        public TextView text;
-        public TextView text1;
-        //public TextView textWide;
-        public ImageView image;
-
+        public TextView building;
+        public TextView location;
+        public TextView foodCategory;
+        public TextView foodType;
+        public TextView foodDescription;
     }
 
     /****** Depends upon data size called for each row , Create each ListView row *****/
@@ -76,9 +74,11 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             /****** View Holder Object to contain tabitem.xml file elements ******/
 
             holder = new ViewHolder();
-            holder.text = (TextView) vi.findViewById(R.id.text);
-            /*holder.text1 = (TextView) vi.findViewById(R.id.text1);
-            holder.image = (ImageView) vi.findViewById(R.id.image);*/
+            holder.building = (TextView) vi.findViewById(R.id.building);
+            holder.location = (TextView) vi.findViewById(R.id.location);
+            holder.foodCategory = (TextView) vi.findViewById(R.id.food_category);
+            holder.foodType = (TextView) vi.findViewById(R.id.food_type);
+            holder.foodDescription = (TextView) vi.findViewById(R.id.food_description);
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag(holder);
@@ -87,7 +87,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder = (ViewHolder) vi.getTag();
 
         if (data.size() <= 0)
-            holder.text.setText("No Data");
+            holder.building.setText("No Data");
         else {
             /***** Get each Model object from Arraylist ********/
             tempValues = null;
@@ -95,12 +95,11 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
             /************  Set Model values in Holder elements ***********/
 
-            holder.text.setText(tempValues.getType());
-            /*holder.text1.setText( tempValues.getUrl() );
-            holder.image.setImageResource(
-                    res.getIdentifier(
-                            "com.androidexample.customlistview:drawable/"+tempValues.getImage()
-                            ,null,null));*/
+            holder.building.setText(tempValues.getBuilding());
+            holder.location.setText(tempValues.getLocation());
+            holder.foodCategory.setText(tempValues.getCategory());
+            holder.foodType.setText(tempValues.getType());
+            holder.foodDescription.setText(tempValues.getDescription());
 
             /******** Set Item Click Listner for LayoutInflater for each row *******/
 
