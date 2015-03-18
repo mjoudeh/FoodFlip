@@ -27,9 +27,9 @@ public class SearchScreenActivity extends Activity {
     ImageButton back_button_search_form;
     ImageButton account_button_search_form;
     ListView listView;
-    ArrayList<ListModel> httpResponse = new ArrayList<>();
+    ArrayList<ListModel> httpResponse;
     CustomAdapter customAdapter;
-    public SearchScreenActivity customListView = null;
+    public SearchScreenActivity customListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ public class SearchScreenActivity extends Activity {
         setContentView(R.layout.activity_search);
         final Context context = this;
         customListView = this;
+        httpResponse = new ArrayList<>();
 
         listView = (ListView) findViewById(R.id.entries_list_view);
         back_button_search_form = (ImageButton) findViewById(R.id.back_button_search_form);
@@ -58,7 +59,8 @@ public class SearchScreenActivity extends Activity {
         RequestParams params = new RequestParams();
 
         // Make Http call to insertentry.php
-        client.post("http://192.168.1.6/foodflip/getentries.php", params, new AsyncHttpResponseHandler() {
+        client.post("http://192.168.1.6/foodflip/getentries.php", params,
+                new AsyncHttpResponseHandler() {
 
             @Override
             public void onSuccess(String response) {
@@ -85,11 +87,14 @@ public class SearchScreenActivity extends Activity {
             public void onFailure(int statusCode, Throwable error, String content) {
                 System.out.println("failure.");
                 if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Requested resource not found",
+                            Toast.LENGTH_LONG).show();
                 } else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Something went wrong at server end",
+                            Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet]",
+                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most " +
+                            "common Error: Device might not be connected to Internet]",
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -109,16 +114,8 @@ public class SearchScreenActivity extends Activity {
     {
         ListModel tempValues = (ListModel) httpResponse.get(mPosition);
 
-
-        // SHOW ALERT
-
-        /*Toast.makeText(CustomListView, ""+tempValues.getCompanyName()
-                        +"
-                Image:"+tempValues.getImage()
-            +"
-        Url:"+tempValues.getUrl(),
-        Toast.LENGTH_LONG)
-        .show();*/
+        Toast.makeText(customListView, tempValues.getLocation() + " " + mPosition,
+                Toast.LENGTH_LONG).show();
     }
 
 }

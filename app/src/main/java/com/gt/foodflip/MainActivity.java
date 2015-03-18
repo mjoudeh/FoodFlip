@@ -3,15 +3,19 @@ package com.gt.foodflip;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import java.util.UUID;
+
 
 public class MainActivity extends ActionBarActivity {
     ImageButton main_screen_search;
     ImageButton main_screen_submit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +25,33 @@ public class MainActivity extends ActionBarActivity {
         main_screen_submit = (ImageButton) findViewById(R.id.main_screen_submit);
         main_screen_search.setOnClickListener(searchScreen);
         main_screen_submit.setOnClickListener(submitScreen);
+
+        /* The following lines of code are used to get a unique Id for each device */
+        final TelephonyManager tm = (TelephonyManager) getBaseContext().
+                getSystemService(this.TELEPHONY_SERVICE);
+
+        final String tmDevice, tmSerial, androidId;
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(),
+                android.provider.Settings.Secure.ANDROID_ID);
+
+        /* System.out.println("tmDevice: " + tmDevice);
+        System.out.println("tmSerial: " + tmSerial);
+        System.out.println("androidId: " + androidId); */
+
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) |
+                tmSerial.hashCode());
+        String deviceId = deviceUuid.toString();
+
+        /* System.out.println("deviceId: " + deviceId); */
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
