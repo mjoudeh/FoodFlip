@@ -114,8 +114,8 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             vi.setOnClickListener(new OnItemClickListener(position));
 
             /* Set onClickListeners for downvote and upvote buttons */
-            /* holder.downvote.setOnClickListener(downvoteClicked);
-            holder.upvote.setOnClickListener(upvoteClicked); */
+            holder.downvote.setOnClickListener(new OnDownvoteClickListener(holder.votes));
+            holder.upvote.setOnClickListener(new OnUpvoteClickListener(holder.votes));
         }
         return vi;
     }
@@ -125,19 +125,35 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         Log.v("CustomAdapter", "=====Row button clicked=====");
     }
 
-    /*View.OnClickListener downvoteClicked = new View.OnClickListener() {
-        public void onClick(View v) {
-            int currentVotes = Integer.parseInt(votes.getText().toString());
-            votes.setText(currentVotes++);
-        }
-    };
+    /* This handles upvotes and setting the vote counter */
+    private class OnUpvoteClickListener implements View.OnClickListener {
+        private TextView votes;
 
-    View.OnClickListener upvoteClicked = new View.OnClickListener() {
-        public void onClick(View v) {
-            int currentVotes = Integer.parseInt(votes.getText().toString());
-            votes.setText(currentVotes--);
+        OnUpvoteClickListener(TextView votes) {
+            this.votes = votes;
         }
-    };*/
+
+        @Override
+        public void onClick(View arg0) {
+            int currentVotes = Integer.parseInt(this.votes.getText().toString());
+            this.votes.setText(Integer.toString(++currentVotes));
+        }
+    }
+
+    /* This handles downvotes and setting the vote counter */
+    private class OnDownvoteClickListener implements View.OnClickListener {
+        private TextView votes;
+
+        OnDownvoteClickListener(TextView votes) {
+            this.votes = votes;
+        }
+
+        @Override
+        public void onClick(View arg0) {
+            int currentVotes = Integer.parseInt(this.votes.getText().toString());
+            this.votes.setText(Integer.toString(--currentVotes));
+        }
+    }
 
     /********* Called when Item click in ListView ************/
     private class OnItemClickListener implements View.OnClickListener {
@@ -152,7 +168,6 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             SearchScreenActivity sct = (SearchScreenActivity) activity;
 
             /****  Call  onItemClick Method inside CustomListViewAndroidExample Class ( See Below )****/
-
             sct.onItemClick(mPosition);
         }
     }

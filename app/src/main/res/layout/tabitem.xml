@@ -62,8 +62,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:src="@drawable/up_vote_button"
-        android:scaleType="centerCrop"
-        android:layout_above="@+id/building" />
+        android:scaleType="fitCenter"
+        android:layout_above="@+id/building"
+        android:background="@null" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -89,6 +90,7 @@
         android:layout_alignBottom="@+id/location"
         android:layout_alignLeft="@+id/votes"
         android:layout_alignStart="@+id/votes"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitCenter"
+        android:background="@null" />
 
 </RelativeLayout>
