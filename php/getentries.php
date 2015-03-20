@@ -12,6 +12,7 @@
 			$b["foodCategory"] = $row["FoodCategory"];
 			$b["foodType"] = $row["FoodType"];
 			$b["foodDescription"] = $row["FoodDescription"];
+			$b["votes"] = $row["Votes"];
 			array_push($a,$b);
 		}
 		echo json_encode($a);

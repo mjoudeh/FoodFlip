@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,9 +19,9 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
     /*********** Declare Used Variables *********/
     private Activity activity;
     private ArrayList data;
-    private static LayoutInflater inflater=null;
+    private static LayoutInflater inflater = null;
     public Resources res;
-    ListModel tempValues=null;
+    FoodEntry tempValues = null;
     int i = 0;
 
     /*************  CustomAdapter Constructor *****************/
@@ -39,7 +40,8 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
     /******** What is the size of Passed Arraylist Size ************/
     public int getCount() {
-        if(data.size()<=0) return 1;
+        if(data.size() <= 0)
+            return 1;
         return data.size();
     }
 
@@ -57,7 +59,10 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         public TextView location;
         public TextView foodCategory;
         public TextView foodType;
+        public TextView votes;
         public TextView foodDescription;
+        public ImageButton downvote;
+        public ImageButton upvote;
     }
 
     /****** Depends upon data size called for each row , Create each ListView row *****/
@@ -78,6 +83,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder.location = (TextView) vi.findViewById(R.id.location);
             holder.foodCategory = (TextView) vi.findViewById(R.id.food_category);
             holder.foodType = (TextView) vi.findViewById(R.id.food_type);
+            holder.votes = (TextView) vi.findViewById(R.id.votes);
             //holder.foodDescription = (TextView) vi.findViewById(R.id.food_description);
 
             /************  Set holder with LayoutInflater ************/
@@ -91,7 +97,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         else {
             /***** Get each Model object from Arraylist ********/
             tempValues = null;
-            tempValues = (ListModel) data.get(position);
+            tempValues = (FoodEntry) data.get(position);
 
             /************  Set Model values in Holder elements ***********/
 
@@ -99,11 +105,17 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder.location.setText(tempValues.getLocation());
             holder.foodCategory.setText(tempValues.getCategory());
             holder.foodType.setText(tempValues.getType());
+            holder.votes.setText(Integer.toString(tempValues.getVotes()));
+            holder.downvote = (ImageButton) vi.findViewById(R.id.downvote);
+            holder.upvote = (ImageButton) vi.findViewById(R.id.upvote);
             //holder.foodDescription.setText(tempValues.getDescription());
 
-            /******** Set Item Click Listner for LayoutInflater for each row *******/
-
+            /******** Set Item Click Listener for LayoutInflater for each row *******/
             vi.setOnClickListener(new OnItemClickListener(position));
+
+            /* Set onClickListeners for downvote and upvote buttons */
+            /* holder.downvote.setOnClickListener(downvoteClicked);
+            holder.upvote.setOnClickListener(upvoteClicked); */
         }
         return vi;
     }
@@ -112,6 +124,20 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
     public void onClick(View v) {
         Log.v("CustomAdapter", "=====Row button clicked=====");
     }
+
+    /*View.OnClickListener downvoteClicked = new View.OnClickListener() {
+        public void onClick(View v) {
+            int currentVotes = Integer.parseInt(votes.getText().toString());
+            votes.setText(currentVotes++);
+        }
+    };
+
+    View.OnClickListener upvoteClicked = new View.OnClickListener() {
+        public void onClick(View v) {
+            int currentVotes = Integer.parseInt(votes.getText().toString());
+            votes.setText(currentVotes--);
+        }
+    };*/
 
     /********* Called when Item click in ListView ************/
     private class OnItemClickListener implements View.OnClickListener {

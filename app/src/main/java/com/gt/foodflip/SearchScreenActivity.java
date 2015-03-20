@@ -1,7 +1,6 @@
 package com.gt.foodflip;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -27,7 +26,7 @@ public class SearchScreenActivity extends Activity {
     ImageButton back_button_search_form;
     ImageButton account_button_search_form;
     ListView listView;
-    ArrayList<ListModel> httpResponse;
+    ArrayList<FoodEntry> httpResponse;
     CustomAdapter customAdapter;
     public SearchScreenActivity customListView;
 
@@ -35,7 +34,6 @@ public class SearchScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        final Context context = this;
         customListView = this;
         httpResponse = new ArrayList<>();
 
@@ -44,15 +42,14 @@ public class SearchScreenActivity extends Activity {
         account_button_search_form = (ImageButton) findViewById(R.id.account_button_search_form);
 
         back_button_search_form.setOnClickListener(mainScreen);
-
-        getFoodEntries(context);
+        getFoodEntries();
 
         Resources resources = getResources();
         customAdapter = new CustomAdapter(customListView, httpResponse, resources);
         listView.setAdapter(customAdapter);
     }
 
-    public void getFoodEntries(final Context context) {
+    public void getFoodEntries() {
         AsyncHttpClient client = new AsyncHttpClient();
 
         // Http Request Params Object
@@ -67,13 +64,14 @@ public class SearchScreenActivity extends Activity {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        final ListModel entry = new ListModel();
+                        final FoodEntry entry = new FoodEntry();
                         JSONObject obj = jsonArray.getJSONObject(i);
                         entry.setBuilding(obj.getString("building"));
                         entry.setLocation(obj.getString("location"));
                         entry.setCategory(obj.getString("foodCategory"));
                         entry.setType(obj.getString("foodType"));
                         entry.setDescription(obj.getString("foodDescription"));
+                        entry.setVotes(Integer.parseInt(obj.getString("votes")));
                         httpResponse.add(entry);
                     }
                 } catch (JSONException e) {
@@ -112,7 +110,7 @@ public class SearchScreenActivity extends Activity {
     /*****************  This function used by adapter ****************/
     public void onItemClick(int mPosition)
     {
-        ListModel tempValues = (ListModel) httpResponse.get(mPosition);
+        FoodEntry tempValues = httpResponse.get(mPosition);
 
         Toast.makeText(customListView, tempValues.getLocation() + " " + mPosition,
                 Toast.LENGTH_LONG).show();

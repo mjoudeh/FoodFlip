@@ -81,7 +81,8 @@ public class SubmitScreenActivity extends Activity {
         public void onClick(View v) {
         ToggleButton t = (ToggleButton) v;
 
-        if (!t.isChecked()) return;
+        if (!t.isChecked())
+            return;
 
         switch(t.getText().toString()) {
             case "Food Truck":
@@ -104,7 +105,8 @@ public class SubmitScreenActivity extends Activity {
 
     View.OnClickListener submitFood = new View.OnClickListener() {
         public void onClick(View v) {
-            if (!validateInput()) return;
+            if (!validateInput())
+                return;
 
             String category = getCategory();
             String types = getTypes();
