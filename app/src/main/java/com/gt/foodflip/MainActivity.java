@@ -11,7 +11,9 @@ import android.widget.ImageButton;
 
 import java.util.UUID;
 
-
+/**
+ * MainActivity displays the home screen, logo, search, and submit buttons.
+ */
 public class MainActivity extends ActionBarActivity {
     ImageButton main_screen_search;
     ImageButton main_screen_submit;
@@ -26,7 +28,10 @@ public class MainActivity extends ActionBarActivity {
         main_screen_search.setOnClickListener(searchScreen);
         main_screen_submit.setOnClickListener(submitScreen);
 
-        /* The following lines of code are used to get a unique Id for each device */
+        /*
+         * The following lines of code are used to get a unique Id for each device. This will
+         * be useful for creating and managing user accounts
+         */
         final TelephonyManager tm = (TelephonyManager) getBaseContext().
                 getSystemService(this.TELEPHONY_SERVICE);
 
@@ -36,15 +41,9 @@ public class MainActivity extends ActionBarActivity {
         androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(),
                 android.provider.Settings.Secure.ANDROID_ID);
 
-        /* System.out.println("tmDevice: " + tmDevice);
-        System.out.println("tmSerial: " + tmSerial);
-        System.out.println("androidId: " + androidId); */
-
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) |
                 tmSerial.hashCode());
         String deviceId = deviceUuid.toString();
-
-        /* System.out.println("deviceId: " + deviceId); */
     }
 
 
@@ -70,6 +69,9 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+     * This method takes us to the search screen when the search button is clicked.
+     */
     View.OnClickListener searchScreen = new View.OnClickListener() {
         public void onClick(View v) {
             Intent searchScreen = new Intent(getApplicationContext(), SearchScreenActivity.class);
@@ -77,6 +79,9 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
+    /*
+     * This method takes us to the submit screen when the submit button is clicked.
+     */
     View.OnClickListener submitScreen = new View.OnClickListener() {
         public void onClick(View v) {
             Intent submitScreen = new Intent(getApplicationContext(), SubmitScreenActivity.class);

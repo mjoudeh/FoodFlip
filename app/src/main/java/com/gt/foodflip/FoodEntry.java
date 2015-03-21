@@ -1,11 +1,9 @@
 package com.gt.foodflip;
 
-/*
+/**
  * This class is used to save each food entries data.
  */
-
 public class FoodEntry {
-
     private String building = "";
     private String location = "";
     private String category = "";
@@ -13,8 +11,7 @@ public class FoodEntry {
     private String description = "";
     private int votes;
 
-    /*********** Set Methods ******************/
-
+    /* Setters */
     public void setBuilding(String building)
     {
         this.building = building;
@@ -42,8 +39,7 @@ public class FoodEntry {
         this.votes = votes;
     }
 
-    /*********** Get Methods ****************/
-
+    /* Getters */
     public String getBuilding()
     {
         return this.building;

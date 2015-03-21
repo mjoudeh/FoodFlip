@@ -20,7 +20,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by beer on 2/17/2015.
+ * SearchScreenActivity populates the search screen using the tabitem xml to create a custom
+ * layout for each entry and the activity_search xml for the overall layout.
  */
 public class SearchScreenActivity extends Activity {
     ImageButton back_button_search_form;
@@ -49,6 +50,10 @@ public class SearchScreenActivity extends Activity {
         listView.setAdapter(customAdapter);
     }
 
+    /*
+     * getFoodEntries is responsible for connecting to the database and making a call to
+     * the php script getentries, which returns all food entries in the database.
+     */
     public void getFoodEntries() {
         AsyncHttpClient client = new AsyncHttpClient();
 
@@ -56,7 +61,7 @@ public class SearchScreenActivity extends Activity {
         RequestParams params = new RequestParams();
 
         // Make Http call to insertentry.php
-        client.post("http://192.168.1.6/foodflip/getentries.php", params,
+        client.post("http://10.0.0.19/foodflip/getentries.php", params,
                 new AsyncHttpResponseHandler() {
 
             @Override
@@ -100,6 +105,9 @@ public class SearchScreenActivity extends Activity {
         });
     }
 
+    /*
+     * This method takes us back to the main screen when the back button is clicked.
+     */
     View.OnClickListener mainScreen = new View.OnClickListener() {
         public void onClick(View v) {
             Intent mainScreen = new Intent(getApplicationContext(), MainActivity.class);
@@ -107,13 +115,26 @@ public class SearchScreenActivity extends Activity {
         }
     };
 
-    /*****************  This function used by adapter ****************/
+    /*
+    *  This method gets the specific food entry from the arrayList httpResponse,
+    *  then takes us to that entries page.
+    *
+    *  @param mPosition position of the clicked food entry in the httpResponse arrayList.
+    */
     public void onItemClick(int mPosition)
     {
-        FoodEntry tempValues = httpResponse.get(mPosition);
+        final FoodEntry entry = httpResponse.get(mPosition);
 
-        Toast.makeText(customListView, tempValues.getLocation() + " " + mPosition,
-                Toast.LENGTH_LONG).show();
+        Intent entryScreen = new Intent(getApplicationContext(), EntryScreenActivity.class);
+        entryScreen.putExtra("building", entry.getBuilding());
+        entryScreen.putExtra("location", entry.getLocation());
+        entryScreen.putExtra("category", entry.getCategory());
+        entryScreen.putExtra("type", entry.getType());
+        entryScreen.putExtra("description", entry.getDescription());
+        entryScreen.putExtra("votes", entry.getVotes());
+        startActivity(entryScreen);
+        /*Toast.makeText(customListView, tempValues.getLocation() + " " + mPosition,
+                Toast.LENGTH_LONG).show();*/
     }
 
 }

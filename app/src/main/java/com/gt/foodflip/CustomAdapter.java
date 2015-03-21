@@ -13,10 +13,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/********* Adapter class extends with BaseAdapter and implements with OnClickListener ************/
+/**
+ * CustomAdapter class for the purpose of giving all food entries in the search screen
+ * custom layouts.
+ */
 public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
-
-    /*********** Declare Used Variables *********/
     private Activity activity;
     private ArrayList data;
     private static LayoutInflater inflater = null;
@@ -24,21 +25,26 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
     FoodEntry tempValues = null;
     int i = 0;
 
-    /*************  CustomAdapter Constructor *****************/
-    public CustomAdapter(Activity a, ArrayList d,Resources resLocal) {
+    /**
+     * CustomAdapter Constructor.
+     *
+     * @param a the current Activity.
+     * @param d the arrayList being passed in (contains all food entries).
+     */
+    public CustomAdapter(Activity a, ArrayList d, Resources resLocal) {
 
         /********** Take passed values **********/
         activity = a;
         data = d;
         res = resLocal;
 
-        /***********  Layout inflator to call external xml layout () ***********/
-        inflater = (LayoutInflater )activity.
+        /*  Layout inflator to call external xml layout () */
+        inflater = (LayoutInflater) activity.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
 
-    /******** What is the size of Passed Arraylist Size ************/
+    /* Calculates the size of the passed in arrayList */
     public int getCount() {
         if(data.size() <= 0)
             return 1;
@@ -53,7 +59,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         return position;
     }
 
-    /********* Create a holder Class to contain inflated xml file elements *********/
+    /* Create a holder Class to contain inflated tabitem xml file elements */
     public static class ViewHolder {
         public TextView building;
         public TextView location;
@@ -65,7 +71,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         public ImageButton upvote;
     }
 
-    /****** Depends upon data size called for each row , Create each ListView row *****/
+    /* Depends upon data size called for each row , Create each ListView row */
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View vi = convertView;
@@ -73,11 +79,10 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
         if (convertView == null) {
 
-            /****** Inflate tabitem.xml file for each row ( Defined below ) *******/
+            /* Inflate tabitem.xml file for each row ( Defined below ) */
             vi = inflater.inflate(R.layout.tabitem, null);
 
-            /****** View Holder Object to contain tabitem.xml file elements ******/
-
+            /* View Holder Object to contain tabitem.xml file elements */
             holder = new ViewHolder();
             holder.building = (TextView) vi.findViewById(R.id.building);
             holder.location = (TextView) vi.findViewById(R.id.location);
@@ -86,7 +91,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder.votes = (TextView) vi.findViewById(R.id.votes);
             //holder.foodDescription = (TextView) vi.findViewById(R.id.food_description);
 
-            /************  Set holder with LayoutInflater ************/
+            /*  Set holder with LayoutInflater */
             vi.setTag(holder);
         }
         else
@@ -95,12 +100,11 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         if (data.size() <= 0)
             holder.building.setText("No Data");
         else {
-            /***** Get each Model object from Arraylist ********/
+            /* Get each entry object from Arraylist */
             tempValues = null;
             tempValues = (FoodEntry) data.get(position);
 
-            /************  Set Model values in Holder elements ***********/
-
+            /*  Set entry values in holder elements */
             holder.building.setText(tempValues.getBuilding());
             holder.location.setText(tempValues.getLocation());
             holder.foodCategory.setText(tempValues.getCategory());
@@ -110,7 +114,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder.upvote = (ImageButton) vi.findViewById(R.id.upvote);
             //holder.foodDescription.setText(tempValues.getDescription());
 
-            /******** Set Item Click Listener for LayoutInflater for each row *******/
+            /* Set Item Click Listener for LayoutInflater for each row */
             vi.setOnClickListener(new OnItemClickListener(position));
 
             /* Set onClickListeners for downvote and upvote buttons */
@@ -155,7 +159,11 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         }
     }
 
-    /********* Called when Item click in ListView ************/
+    /**
+     * Called when entry clicked in ListView. Sets each entries onClick to be onItemClick in
+     * SearchScreenActivity. onItemClick, in turn, sets the view to be entry_view, which displays
+     * all the data for the entry clicked by the user.
+     */
     private class OnItemClickListener implements View.OnClickListener {
         private int mPosition;
 

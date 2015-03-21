@@ -16,7 +16,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /**
- * Created by beer on 2/10/2015.
+ * Submit Screen Activity creates a layout using the activity_search xml and allows the user
+ * to submit food into the foodflip database.
  */
 public class SubmitScreenActivity extends Activity {
     ImageButton back_button_submit_form;
@@ -70,6 +71,10 @@ public class SubmitScreenActivity extends Activity {
         buildingsList.setAdapter(adapter);
     }
 
+    /**
+     * the mainScreen onClickListener takes us back to the main screen when the back button is
+     * clicked.
+     */
     View.OnClickListener mainScreen = new View.OnClickListener() {
         public void onClick(View v) {
             Intent mainScreen = new Intent(getApplicationContext(), MainActivity.class);
@@ -77,32 +82,41 @@ public class SubmitScreenActivity extends Activity {
         }
     };
 
+    /**
+     * the toggleCategory onClickListener is called whenever a category is clicked by the user.
+     * It ensures that only one category is selected at a time.
+     */
     View.OnClickListener toggleCategory = new View.OnClickListener() {
         public void onClick(View v) {
-        ToggleButton t = (ToggleButton) v;
+            ToggleButton t = (ToggleButton) v;
 
-        if (!t.isChecked())
-            return;
+            if (!t.isChecked())
+                return;
 
-        switch(t.getText().toString()) {
-            case "Food Truck":
-                delivery_toggle_button.setChecked(false);
-                other_toggle_button.setChecked(false);
-                break;
-            case "Delivery":
-                food_truck_toggle_button.setChecked(false);
-                other_toggle_button.setChecked(false);
-                break;
-            case "Other":
-                food_truck_toggle_button.setChecked(false);
-                delivery_toggle_button.setChecked(false);
-                break;
-            default:
-                break;
-        }
+            switch(t.getText().toString()) {
+                case "Food Truck":
+                    delivery_toggle_button.setChecked(false);
+                    other_toggle_button.setChecked(false);
+                    break;
+                case "Delivery":
+                    food_truck_toggle_button.setChecked(false);
+                    other_toggle_button.setChecked(false);
+                    break;
+                case "Other":
+                    food_truck_toggle_button.setChecked(false);
+                    delivery_toggle_button.setChecked(false);
+                    break;
+                default:
+                    break;
+            }
         }
     };
 
+    /**
+     * the submitFood onClickListener is called when the submit button is clicked. It is
+     * responsible for actually inputting the food entry into the database by making an
+     * http request to insertentry.php.
+     */
     View.OnClickListener submitFood = new View.OnClickListener() {
         public void onClick(View v) {
             if (!validateInput())
@@ -123,7 +137,7 @@ public class SubmitScreenActivity extends Activity {
             params.put("FoodType", types);
             params.put("FoodDescription", text_description.getText().toString());
             // Make Http call to insertentry.php
-            client.post("http://192.168.1.6/foodflip/insertentry.php", params,
+            client.post("http://10.0.0.19/foodflip/insertentry.php", params,
                     new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
@@ -148,6 +162,11 @@ public class SubmitScreenActivity extends Activity {
         }
     };
 
+    /**
+     * returns the current category that is selected.
+     *
+     * @return category - "Food Truck", "Delivery", "Other" - depending which is selected.
+     */
     public String getCategory() {
         if (food_truck_toggle_button.isChecked())
             return "Food Truck";
@@ -157,6 +176,12 @@ public class SubmitScreenActivity extends Activity {
             return "Other";
     }
 
+    /**
+     * Gets all types of food that are checked. Uses a StringBuilder to concatenate all food types
+     * that are checked, then returns the string.
+     *
+     * @return stringBuilder.toString() the string of food types checked.
+     */
     public String getTypes() {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -173,6 +198,9 @@ public class SubmitScreenActivity extends Activity {
     /*
      * This method makes sure that all inputs are not empty.
      * TODO: display a message on false
+     *
+     * @return true if a building is selected, a location is specifies, one food category is chosen,
+     * and at least one food type is chosen. False otherwise.
      */
     public boolean validateInput() {
         if (buildingsList.getText().toString() == "Building" ||
