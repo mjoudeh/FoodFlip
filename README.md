@@ -13,6 +13,7 @@
 	* FoodCategory (varchar(10))
 	* FoodType (varchar(255))
 	* FoodDescription (varchar(255))
+	* Votes (int - default 0)
 	* syncsts (tinyint - default value 0) - this will possibly be used for syncing new entries.
 
 6. In **SubmitScreenActivity** and **SearchScreenActivity** change the *client.post* IP address to the address of your local machine.
