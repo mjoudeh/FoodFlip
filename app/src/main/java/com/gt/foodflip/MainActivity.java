@@ -8,6 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.UUID;
 
@@ -17,6 +26,7 @@ import java.util.UUID;
 public class MainActivity extends ActionBarActivity {
     ImageButton main_screen_search;
     ImageButton main_screen_submit;
+    static String userArray[] = new String[2];
 
 
     @Override
@@ -44,6 +54,13 @@ public class MainActivity extends ActionBarActivity {
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) |
                 tmSerial.hashCode());
         String deviceId = deviceUuid.toString();
+
+        getUser(deviceId);
+
+        if (userArray[0] == null)
+            insertUser(deviceId);
+        else
+            System.out.println(userArray[0]);
     }
 
 
@@ -88,4 +105,80 @@ public class MainActivity extends ActionBarActivity {
             startActivity(submitScreen);
         }
     };
+
+    public String[] getUser(String deviceId) {
+        // Create AsycHttpClient object
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        // Http Request Params Object
+        RequestParams params = new RequestParams();
+
+        params.put("id", deviceId);
+        // Make Http call to insertentry.php
+        client.post("http://192.168.1.6/foodflip/getuser.php", params,
+            new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    JSONObject obj = jsonArray.getJSONObject(0);
+                    userArray[0] = obj.getString("id");
+                    userArray[1] = obj.getString("karma");
+                } catch (JSONException e) {
+                    System.out.println("Error parsing getUser data: " + e.getMessage());
+                    return;
+                }
+            }
+            // When error occured
+            @Override
+            public void onFailure(int statusCode, Throwable error, String content) {
+                if (statusCode == 404)
+                    Toast.makeText(getApplicationContext(), "Requested resource not found",
+                            Toast.LENGTH_LONG).show();
+                else if (statusCode == 500)
+                    Toast.makeText(getApplicationContext(),
+                            "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured!" +
+                                    " [Most common Error: Device might not be connected" +
+                                    " to Internet]",
+                            Toast.LENGTH_LONG).show();
+            }
+        });
+
+        return userArray;
+    }
+
+    public void insertUser(String deviceId) {
+        // Create AsycHttpClient object
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        // Http Request Params Object
+        RequestParams params = new RequestParams();
+
+        params.put("id", deviceId);
+        // Make Http call to insertentry.php
+        client.post("http://192.168.1.6/foodflip/insertuser.php", params,
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(String response) {
+                        System.out.println(response);
+                    }
+                    // When error occured
+                    @Override
+                    public void onFailure(int statusCode, Throwable error, String content) {
+                        if (statusCode == 404)
+                            Toast.makeText(getApplicationContext(), "Requested resource not found",
+                                    Toast.LENGTH_LONG).show();
+                        else if (statusCode == 500)
+                            Toast.makeText(getApplicationContext(),
+                                    "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(getApplicationContext(), "Unexpected Error occcured!" +
+                                            " [Most common Error: Device might not be connected" +
+                                            " to Internet]",
+                                    Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 }

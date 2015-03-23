@@ -24,6 +24,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
     public Resources res;
     FoodEntry tempValues = null;
     int i = 0;
+    ViewHolder holder;
 
     /**
      * CustomAdapter Constructor.
@@ -75,7 +76,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View vi = convertView;
-        ViewHolder holder;
+        //ViewHolder holder;
 
         if (convertView == null) {
 

@@ -61,7 +61,7 @@ public class SearchScreenActivity extends Activity {
         RequestParams params = new RequestParams();
 
         // Make Http call to insertentry.php
-        client.post("http://10.0.0.19/foodflip/getentries.php", params,
+        client.post("http://192.168.1.6/foodflip/getentries.php", params,
                 new AsyncHttpResponseHandler() {
 
             @Override
@@ -126,15 +126,15 @@ public class SearchScreenActivity extends Activity {
         final FoodEntry entry = httpResponse.get(mPosition);
 
         Intent entryScreen = new Intent(getApplicationContext(), EntryScreenActivity.class);
+
         entryScreen.putExtra("building", entry.getBuilding());
         entryScreen.putExtra("location", entry.getLocation());
         entryScreen.putExtra("category", entry.getCategory());
         entryScreen.putExtra("type", entry.getType());
         entryScreen.putExtra("description", entry.getDescription());
         entryScreen.putExtra("votes", entry.getVotes());
+
         startActivity(entryScreen);
-        /*Toast.makeText(customListView, tempValues.getLocation() + " " + mPosition,
-                Toast.LENGTH_LONG).show();*/
     }
 
 }
