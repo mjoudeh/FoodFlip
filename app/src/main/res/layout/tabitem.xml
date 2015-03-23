@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    tools:context=".SubmitScreenActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/food_type"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:textColor="#ff80400f" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:id="@+id/type_category_hyphen"
+        android:layout_alignTop="@+id/food_type"
+        android:layout_toRightOf="@+id/food_type"
+        android:layout_toEndOf="@+id/food_type" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/food_category"
+        android:layout_alignTop="@+id/type_category_hyphen"
+        android:layout_toRightOf="@+id/type_category_hyphen"
+        android:layout_toEndOf="@+id/type_category_hyphen"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:textColor="#ff368b2d" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/building"
+        android:layout_below="@+id/food_type"
+        android:layout_alignLeft="@+id/food_type"
+        android:layout_alignStart="@+id/food_type"
+        android:textColor="#ffadadb1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/location"
+        android:layout_below="@+id/building"
+        android:layout_alignLeft="@+id/building"
+        android:layout_alignStart="@+id/building"
+        android:layout_marginTop="9dp" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:id="@+id/upvote"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/up_vote_button"
+        android:scaleType="fitCenter"
+        android:layout_above="@+id/building"
+        android:background="@null" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/votes"
+        android:layout_below="@+id/upvote"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/upvote"
+        android:layout_alignStart="@+id/upvote"
+        android:gravity="center"
+        android:layout_above="@+id/location" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/downvote"
+        android:layout_below="@+id/votes"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/down_vote_button"
+        android:layout_alignBottom="@+id/location"
+        android:layout_alignLeft="@+id/votes"
+        android:layout_alignStart="@+id/votes"
+        android:scaleType="fitCenter"
+        android:background="@null" />
+
+</RelativeLayout>

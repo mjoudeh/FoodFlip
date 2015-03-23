@@ -4,7 +4,6 @@ class FFDB_Functions {
 
     private $ffdb;
 
-    //put your code here
     // constructor
     function __construct() {
         include_once './ffdb_connect.php';
@@ -17,14 +16,35 @@ class FFDB_Functions {
     function __destruct() {
         
     }
+	
+	/**
+	 * Get user
+	 */
+	public function getUser($id) {
+		$result = mysql_query("SELECT * FROM users WHERE id = '$id'");
+		return $result;
+	}
+	
+	/**
+	 * Store new user
+	 */
+	public function storeUser($id) {
+		$result = mysql_query("INSERT INTO users(id, karma) VALUES('$id', '0')");
+		
+		if ($result) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
     /**
-     * Storing new user
-     * returns user details
+     * Storing new entry
+     * returns entry details
      */
-    public function storeEntry($Entry) {
+    public function storeEntry($building, $location, $foodCategory, $foodType, $foodDescription) {
         // Insert entry into database
-        $result = mysql_query("INSERT INTO food_entries(FoodType) VALUES('$Entry')");
+        $result = mysql_query("INSERT INTO food_entries(Building, Location, FoodCategory, FoodType, FoodDescription) VALUES('$building', '$location', '$foodCategory', '$foodType', '$foodDescription')");
 		
         if ($result) {
 			return true;
