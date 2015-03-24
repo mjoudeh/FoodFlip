@@ -115,7 +115,7 @@ public class MainActivity extends ActionBarActivity {
 
         params.put("id", deviceId);
         // Make Http call to insertentry.php
-        client.post("http://192.168.1.6/foodflip/getuser.php", params,
+        client.post("http://128.61.126.16/foodflip/getuser.php", params,
             new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
@@ -158,7 +158,7 @@ public class MainActivity extends ActionBarActivity {
 
         params.put("id", deviceId);
         // Make Http call to insertentry.php
-        client.post("http://192.168.1.6/foodflip/insertuser.php", params,
+        client.post("http://128.61.126.16/foodflip/insertuser.php", params,
                 new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(String response) {

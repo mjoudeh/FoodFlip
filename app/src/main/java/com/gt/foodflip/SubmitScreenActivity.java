@@ -137,7 +137,7 @@ public class SubmitScreenActivity extends Activity {
             params.put("FoodType", types);
             params.put("FoodDescription", text_description.getText().toString());
             // Make Http call to insertentry.php
-            client.post("http://192.168.1.6/foodflip/insertentry.php", params,
+            client.post("http://128.61.126.16/foodflip/insertentry.php", params,
                     new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {

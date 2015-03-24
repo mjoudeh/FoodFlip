@@ -61,7 +61,7 @@ public class SearchScreenActivity extends Activity {
         RequestParams params = new RequestParams();
 
         // Make Http call to insertentry.php
-        client.post("http://192.168.1.6/foodflip/getentries.php", params,
+        client.post("http://128.61.126.16/foodflip/getentries.php", params,
                 new AsyncHttpResponseHandler() {
 
             @Override
