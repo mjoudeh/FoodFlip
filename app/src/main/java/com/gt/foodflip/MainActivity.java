@@ -1,6 +1,8 @@
 package com.gt.foodflip;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
@@ -8,16 +10,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONArray;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -26,7 +33,8 @@ import java.util.UUID;
 public class MainActivity extends ActionBarActivity {
     ImageButton main_screen_search;
     ImageButton main_screen_submit;
-    static String userArray[] = new String[2];
+    static User currentUser = new User();
+    ProgressDialog progress;
 
 
     @Override
@@ -53,14 +61,11 @@ public class MainActivity extends ActionBarActivity {
 
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) |
                 tmSerial.hashCode());
-        String deviceId = deviceUuid.toString();
+        final String deviceId = deviceUuid.toString();
 
-        getUser(deviceId);
-
-        if (userArray[0] == null)
-            insertUser(deviceId);
-        else
-            System.out.println(userArray[0]);
+        progress = new ProgressDialog(this);
+        progress.setMessage("Loading...");
+        new MyTask(progress, deviceId).execute();
     }
 
 
@@ -71,11 +76,12 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    public void checkCurrentUser() {
+        System.out.println("in check current user: " + currentUser.getId());
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -106,79 +112,73 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
-    public String[] getUser(String deviceId) {
-        // Create AsycHttpClient object
-        AsyncHttpClient client = new AsyncHttpClient();
+    public boolean getUser(String deviceId) {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://128.61.117.147/foodflip/getuser.php");
+        try {
+            List nameValuePairs = new ArrayList();
+            nameValuePairs.add(new BasicNameValuePair("id", deviceId));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+            String result = EntityUtils.toString(response.getEntity());
+            JSONObject user = new JSONObject(result);
+            currentUser.setId(user.getString("id"));
+            currentUser.setKarma(user.getString("karma"));
+        } catch (ClientProtocolException e) {
+            System.out.println("ClientProtocolException in getUser: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException in getUser: " + e.getMessage());
+        } catch (JSONException e) {
+            System.out.println("JSONException in getUser: " + e.getMessage());
+        }
 
-        // Http Request Params Object
-        RequestParams params = new RequestParams();
+        if (currentUser.getId() == null || currentUser.getId() == "" ||
+                currentUser.getKarma() == null || currentUser.getKarma() == "")
+            return false;
 
-        params.put("id", deviceId);
-        // Make Http call to insertentry.php
-        client.post("http://128.61.126.16/foodflip/getuser.php", params,
-            new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    JSONObject obj = jsonArray.getJSONObject(0);
-                    userArray[0] = obj.getString("id");
-                    userArray[1] = obj.getString("karma");
-                } catch (JSONException e) {
-                    System.out.println("Error parsing getUser data: " + e.getMessage());
-                    return;
-                }
-            }
-            // When error occured
-            @Override
-            public void onFailure(int statusCode, Throwable error, String content) {
-                if (statusCode == 404)
-                    Toast.makeText(getApplicationContext(), "Requested resource not found",
-                            Toast.LENGTH_LONG).show();
-                else if (statusCode == 500)
-                    Toast.makeText(getApplicationContext(),
-                            "Something went wrong at server end", Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured!" +
-                                    " [Most common Error: Device might not be connected" +
-                                    " to Internet]",
-                            Toast.LENGTH_LONG).show();
-            }
-        });
-
-        return userArray;
+        return true;
     }
 
     public void insertUser(String deviceId) {
-        // Create AsycHttpClient object
-        AsyncHttpClient client = new AsyncHttpClient();
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://128.61.117.147/foodflip/insertuser.php");
+        try {
+            List nameValuePairs = new ArrayList();
+            nameValuePairs.add(new BasicNameValuePair("id", deviceId));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+            currentUser.setId(deviceId);
+            currentUser.setKarma("0");
+        } catch (ClientProtocolException e) {
+            System.out.println("ClientProtocolException in getUser: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException in getUser: " + e.getMessage());
+        }
+    }
 
-        // Http Request Params Object
-        RequestParams params = new RequestParams();
+    public class MyTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progress;
+        private String deviceId;
 
-        params.put("id", deviceId);
-        // Make Http call to insertentry.php
-        client.post("http://128.61.126.16/foodflip/insertuser.php", params,
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(String response) {
-                        System.out.println(response);
-                    }
-                    // When error occured
-                    @Override
-                    public void onFailure(int statusCode, Throwable error, String content) {
-                        if (statusCode == 404)
-                            Toast.makeText(getApplicationContext(), "Requested resource not found",
-                                    Toast.LENGTH_LONG).show();
-                        else if (statusCode == 500)
-                            Toast.makeText(getApplicationContext(),
-                                    "Something went wrong at server end", Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(getApplicationContext(), "Unexpected Error occcured!" +
-                                            " [Most common Error: Device might not be connected" +
-                                            " to Internet]",
-                                    Toast.LENGTH_LONG).show();
-                    }
-                });
+        public MyTask(ProgressDialog progress, String deviceId) {
+            this.progress = progress;
+            this.deviceId = deviceId;
+        }
+
+        public void onPreExecute() {
+            progress.show();
+        }
+
+        public Void doInBackground(Void... unused) {
+            if (!getUser(this.deviceId))
+                insertUser(this.deviceId);
+            return null;
+        }
+
+        public void onPostExecute(Void unused) {
+            if (progress.isShowing())
+                progress.dismiss();
+            checkCurrentUser();
+        }
     }
 }
