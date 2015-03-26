@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity {
 
         progress = new ProgressDialog(this);
         progress.setMessage("Loading...");
-        new MyTask(progress, deviceId).execute();
+        new SetCurrentUser(progress, deviceId).execute();
     }
 
 
@@ -76,6 +76,10 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * Right now this prints out the current user... mainly as a sanity check to make sure the
+     * user is set.
+     */
     public void checkCurrentUser() {
         System.out.println("in check current user: " + currentUser.getId());
     }
@@ -84,7 +88,6 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -150,17 +153,17 @@ public class MainActivity extends ActionBarActivity {
             currentUser.setId(deviceId);
             currentUser.setKarma("0");
         } catch (ClientProtocolException e) {
-            System.out.println("ClientProtocolException in getUser: " + e.getMessage());
+            System.out.println("ClientProtocolException in insertUser: " + e.getMessage());
         } catch (IOException e) {
-            System.out.println("IOException in getUser: " + e.getMessage());
+            System.out.println("IOException in insertUser: " + e.getMessage());
         }
     }
 
-    public class MyTask extends AsyncTask<Void, Void, Void> {
+    public class SetCurrentUser extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progress;
         private String deviceId;
 
-        public MyTask(ProgressDialog progress, String deviceId) {
+        public SetCurrentUser(ProgressDialog progress, String deviceId) {
             this.progress = progress;
             this.deviceId = deviceId;
         }
