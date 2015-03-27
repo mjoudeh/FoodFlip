@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity {
     ImageButton main_screen_search;
     ImageButton main_screen_submit;
     static User currentUser = new User();
-    ProgressDialog progress;
+    ProgressDialog pDialog;
 
 
     @Override
@@ -46,10 +46,16 @@ public class MainActivity extends ActionBarActivity {
         main_screen_search.setOnClickListener(searchScreen);
         main_screen_submit.setOnClickListener(submitScreen);
 
-        /*
-         * The following lines of code are used to get a unique Id for each device. This will
-         * be useful for creating and managing user accounts
-         */
+        String deviceId = getUniqueId();
+        new SetCurrentUser(pDialog, deviceId).execute();
+    }
+
+    /**
+     * Creates a unique Id for a user.
+     *
+     * @return - the unique Id of the user.
+     */
+    public String getUniqueId() {
         final TelephonyManager tm = (TelephonyManager) getBaseContext().
                 getSystemService(this.TELEPHONY_SERVICE);
 
@@ -61,18 +67,12 @@ public class MainActivity extends ActionBarActivity {
 
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) |
                 tmSerial.hashCode());
-        final String deviceId = deviceUuid.toString();
-
-        progress = new ProgressDialog(this);
-        progress.setMessage("Loading...");
-        new SetCurrentUser(progress, deviceId).execute();
+        String deviceId = deviceUuid.toString();
+        return deviceId;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -87,12 +87,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     /*
@@ -115,9 +110,16 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
+    /**
+     * Gets a unique user from the database and stores them in currentUser.
+     *
+     * @param deviceId - the unique id of the user.
+     * @return true - if the user was retrieved successfully, false otherwise.
+     */
     public boolean getUser(String deviceId) {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://128.61.117.147/foodflip/getuser.php");
+        HttpPost httppost = new HttpPost("http://192.168.1.6/foodflip/getuser.php");
+
         try {
             List nameValuePairs = new ArrayList();
             nameValuePairs.add(new BasicNameValuePair("id", deviceId));
@@ -135,16 +137,18 @@ public class MainActivity extends ActionBarActivity {
             System.out.println("JSONException in getUser: " + e.getMessage());
         }
 
-        if (currentUser.getId() == null || currentUser.getId() == "" ||
-                currentUser.getKarma() == null || currentUser.getKarma() == "")
-            return false;
-
-        return true;
+        return currentUser.getId() != null && !currentUser.getId().equals("") &&
+                currentUser.getKarma() != null && !currentUser.getKarma().equals("");
     }
 
+    /**
+     * Inserts a new user into the database.
+     *
+     * @param deviceId - the unique id of the user.
+     */
     public void insertUser(String deviceId) {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://128.61.117.147/foodflip/insertuser.php");
+        HttpPost httppost = new HttpPost("http://192.168.1.6/foodflip/insertuser.php");
         try {
             List nameValuePairs = new ArrayList();
             nameValuePairs.add(new BasicNameValuePair("id", deviceId));
@@ -159,6 +163,33 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    private void showProgressDialog() {
+        if (pDialog == null) {
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setMessage("Loading. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+        }
+        pDialog.show();
+    }
+
+    private void dismissProgressDialog() {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
+    }
+
+
+    /**
+     * This class is responsible for displaying the loading dialog while making a call to the
+     * server to get the user's profile.
+     */
     public class SetCurrentUser extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progress;
         private String deviceId;
@@ -169,7 +200,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         public void onPreExecute() {
-            progress.show();
+            showProgressDialog();
         }
 
         public Void doInBackground(Void... unused) {
@@ -179,9 +210,12 @@ public class MainActivity extends ActionBarActivity {
         }
 
         public void onPostExecute(Void unused) {
-            if (progress.isShowing())
-                progress.dismiss();
+            if (MainActivity.this.isDestroyed())
+                return;
+
+            dismissProgressDialog();
             checkCurrentUser();
         }
+
     }
 }

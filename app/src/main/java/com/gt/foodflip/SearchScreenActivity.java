@@ -34,7 +34,7 @@ public class SearchScreenActivity extends Activity {
     ArrayList<FoodEntry> httpResponse;
     CustomAdapter customAdapter;
     public SearchScreenActivity customListView;
-    ProgressDialog progress;
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +48,7 @@ public class SearchScreenActivity extends Activity {
         account_button_search_form = (ImageButton) findViewById(R.id.account_button_search_form);
 
         back_button_search_form.setOnClickListener(mainScreen);
-
-        progress = new ProgressDialog(this);
-        progress.setMessage("Loading...");
-        new PopulateFoodEntries(progress).execute();
+        new PopulateFoodEntries(pDialog).execute();
     }
 
     /*
@@ -60,7 +57,7 @@ public class SearchScreenActivity extends Activity {
      */
     public void getFoodEntries() {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://128.61.117.147/foodflip/getentries.php");
+        HttpPost httppost = new HttpPost("http://192.168.1.6/foodflip/getentries.php");
         try {
             HttpResponse response = httpclient.execute(httppost);
             String result = EntityUtils.toString(response.getEntity());
@@ -99,11 +96,11 @@ public class SearchScreenActivity extends Activity {
     *  This method gets the specific food entry from the arrayList httpResponse,
     *  then takes us to that entries page.
     *
-    *  @param mPosition position of the clicked food entry in the httpResponse arrayList.
+    *  @param position position of the clicked food entry in the httpResponse arrayList.
     */
-    public void onItemClick(int mPosition)
+    public void onItemClick(int position)
     {
-        final FoodEntry entry = httpResponse.get(mPosition);
+        final FoodEntry entry = httpResponse.get(position);
 
         Intent entryScreen = new Intent(getApplicationContext(), EntryScreenActivity.class);
 
@@ -117,6 +114,32 @@ public class SearchScreenActivity extends Activity {
         startActivity(entryScreen);
     }
 
+    private void showProgressDialog() {
+        if (pDialog == null) {
+            pDialog = new ProgressDialog(SearchScreenActivity.this);
+            pDialog.setMessage("Loading. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+        }
+        pDialog.show();
+    }
+
+    private void dismissProgressDialog() {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
+    }
+
+
+    /**
+     * Shows a loading progress dialog while populating the food entries.
+     */
     public class PopulateFoodEntries extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progress;
 
@@ -125,7 +148,7 @@ public class SearchScreenActivity extends Activity {
         }
 
         public void onPreExecute() {
-            progress.show();
+            showProgressDialog();
         }
 
         public Void doInBackground(Void... unused) {
@@ -138,8 +161,10 @@ public class SearchScreenActivity extends Activity {
         }
 
         public void onPostExecute(Void unused) {
-            if (progress.isShowing())
-                progress.dismiss();
+            if (SearchScreenActivity.this.isDestroyed())
+                return;
+
+            dismissProgressDialog();
         }
     }
 }
