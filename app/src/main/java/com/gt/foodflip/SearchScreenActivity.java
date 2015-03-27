@@ -52,7 +52,7 @@ public class SearchScreenActivity extends Activity {
         account_button_search_form = (ImageButton) findViewById(R.id.account_button_search_form);
 
         back_button_search_form.setOnClickListener(mainScreen);
-        new PopulateFoodEntries(pDialog).execute();
+        new PopulateFoodEntries().execute();
 
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
@@ -149,10 +149,7 @@ public class SearchScreenActivity extends Activity {
      * Shows a loading progress dialog while populating the food entries.
      */
     public class PopulateFoodEntries extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog progress;
-
-        public PopulateFoodEntries(ProgressDialog progress) {
-            this.progress = progress;
+        public PopulateFoodEntries() {
         }
 
         public void onPreExecute() {

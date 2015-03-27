@@ -51,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         main_screen_submit.setOnClickListener(submitScreen);
 
         String deviceId = getUniqueId();
-        new SetCurrentUser(pDialog, deviceId).execute();
+        new SetCurrentUser(deviceId).execute();
     }
 
     /**
@@ -61,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
      */
     public String getUniqueId() {
         final TelephonyManager tm = (TelephonyManager) getBaseContext().
-                getSystemService(this.TELEPHONY_SERVICE);
+                getSystemService(TELEPHONY_SERVICE);
 
         final String tmDevice, tmSerial, androidId;
         tmDevice = "" + tm.getDeviceId();
@@ -71,8 +71,7 @@ public class MainActivity extends ActionBarActivity {
 
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) |
                 tmSerial.hashCode());
-        String deviceId = deviceUuid.toString();
-        return deviceId;
+        return deviceUuid.toString();
     }
 
     @Override
@@ -95,7 +94,7 @@ public class MainActivity extends ActionBarActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("id", currentUser.getId());
         editor.putString("karma", currentUser.getKarma());
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -135,7 +134,7 @@ public class MainActivity extends ActionBarActivity {
         HttpPost httppost = new HttpPost("http://192.168.1.6/foodflip/getuser.php");
 
         try {
-            List nameValuePairs = new ArrayList();
+            List<BasicNameValuePair> nameValuePairs = new ArrayList<>();
             nameValuePairs.add(new BasicNameValuePair("id", deviceId));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
@@ -163,10 +162,10 @@ public class MainActivity extends ActionBarActivity {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://192.168.1.6/foodflip/insertuser.php");
         try {
-            List nameValuePairs = new ArrayList();
+            List<BasicNameValuePair> nameValuePairs = new ArrayList<>();
             nameValuePairs.add(new BasicNameValuePair("id", deviceId));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
+            httpclient.execute(httppost);
             currentUser.setId(deviceId);
             currentUser.setKarma("0");
         } catch (ClientProtocolException e) {
@@ -198,17 +197,14 @@ public class MainActivity extends ActionBarActivity {
         super.onDestroy();
     }
 
-
     /**
      * This class is responsible for displaying the loading dialog while making a call to the
      * server to get the user's profile.
      */
     public class SetCurrentUser extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog progress;
         private String deviceId;
 
-        public SetCurrentUser(ProgressDialog progress, String deviceId) {
-            this.progress = progress;
+        public SetCurrentUser(String deviceId) {
             this.deviceId = deviceId;
         }
 

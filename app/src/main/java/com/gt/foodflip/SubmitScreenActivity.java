@@ -42,8 +42,7 @@ public class SubmitScreenActivity extends Activity {
         setContentView(R.layout.activity_submit);
 
         String[] buildings = getResources().getStringArray(R.array.list_of_buildings);
-        ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                 buildings);
 
         buildingsList = (AutoCompleteTextView) findViewById(R.id.autocompletetext_building);
@@ -203,29 +202,34 @@ public class SubmitScreenActivity extends Activity {
      * and at least one food type is chosen. False otherwise.
      */
     public boolean validateInput() {
-        if (buildingsList.getText().toString() == "Building" ||
-                buildingsList.getText().toString() == null ||
-                buildingsList.getText().toString() == "")
-            return false;
+        return validateBuildingsListInput() && validateLocationInput() &&
+                validateCategoryInput() && validateTypeInput();
+    }
 
-        if (text_location.getText().toString() == "Location (room #, area, etc.)" ||
-                text_location.getText().toString() == null ||
-                text_location.getText().toString() == "")
-            return false;
+    public boolean validateBuildingsListInput() {
+        return !buildingsList.getText().toString().equals("Building") &&
+                buildingsList.getText().toString() != null &&
+                !buildingsList.getText().toString().equals("");
+    }
 
-        if (!food_truck_toggle_button.isChecked() &&
-                !delivery_toggle_button.isChecked() &&
-                !other_toggle_button.isChecked())
-            return false;
+    public boolean validateLocationInput() {
+        return !text_location.getText().toString().equals("Location (room #, area, etc.)") &&
+                text_location.getText().toString() != null &&
+                !text_location.getText().toString().equals("");
+    }
 
-        if (!pizza_toggle_button.isChecked() &&
-                !wings_toggle_button.isChecked() &&
-                !baked_goods_toggle_button.isChecked() &&
-                !sandwiches_toggle_button.isChecked() &&
-                !drinks_toggle_button.isChecked() &&
-                !other_toggle_button.isChecked())
-            return false;
+    public boolean validateCategoryInput() {
+        return food_truck_toggle_button.isChecked() ||
+                delivery_toggle_button.isChecked() ||
+                other_toggle_button.isChecked();
+    }
 
-        return true;
+    public boolean validateTypeInput() {
+        return pizza_toggle_button.isChecked() ||
+                wings_toggle_button.isChecked() ||
+                baked_goods_toggle_button.isChecked() ||
+                sandwiches_toggle_button.isChecked() ||
+                drinks_toggle_button.isChecked() ||
+                other_toggle_button.isChecked();
     }
 }
