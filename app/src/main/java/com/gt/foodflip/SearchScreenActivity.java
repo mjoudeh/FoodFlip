@@ -154,9 +154,14 @@ public class SearchScreenActivity extends Activity {
         public Void doInBackground(Void... unused) {
             getFoodEntries();
 
-            Resources resources = getResources();
-            customAdapter = new CustomAdapter(customListView, httpResponse, resources);
-            listView.setAdapter(customAdapter);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Resources resources = getResources();
+                    customAdapter = new CustomAdapter(customListView, httpResponse, resources);
+                    listView.setAdapter(customAdapter);
+                }
+            });
             return null;
         }
 
