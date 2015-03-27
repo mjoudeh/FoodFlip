@@ -127,7 +127,7 @@
         android:layout_alignStart="@+id/text_type" />
 
     <ToggleButton
-        android:layout_width="120dp"
+        android:layout_width="95dp"
         android:layout_height="wrap_content"
         android:text="Food Truck"
         android:textColor="@drawable/text_color_category"
@@ -138,10 +138,11 @@
         android:background="@null"
         android:textOff="Food Truck"
         android:textOn="Food Truck"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp" />
 
     <ToggleButton
-        android:layout_width="120dp"
+        android:layout_width="95dp"
         android:layout_height="wrap_content"
         android:text="Delivery"
         android:textColor="@drawable/text_color_category"
@@ -151,10 +152,12 @@
         android:layout_toEndOf="@+id/food_truck_toggle_button"
         android:background="@null"
         android:textOff="Delivery"
-        android:textOn="Delivery" />
+        android:textOn="Delivery"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="0dp" />
 
     <ToggleButton
-        android:layout_width="120dp"
+        android:layout_width="95dp"
         android:layout_height="wrap_content"
         android:text="Other"
         android:textColor="@drawable/text_color_category"
@@ -165,7 +168,7 @@
         android:background="@null"
         android:textOff="Other"
         android:textOn="Other"
-        android:layout_marginRight="35dp" />
+        android:layout_marginRight="10dp" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -124,10 +124,8 @@ public class SubmitScreenActivity extends Activity {
             String category = getCategory();
             String types = getTypes();
 
-            // Create AsycHttpClient object
             AsyncHttpClient client = new AsyncHttpClient();
 
-            // Http Request Params Object
             RequestParams params = new RequestParams();
 
             params.put("Building", buildingsList.getText().toString());
@@ -135,8 +133,8 @@ public class SubmitScreenActivity extends Activity {
             params.put("FoodCategory", category);
             params.put("FoodType", types);
             params.put("FoodDescription", text_description.getText().toString());
-            // Make Http call to insertentry.php
-            client.post("http://128.61.126.16/foodflip/insertentry.php", params,
+
+            client.post("http://192.168.1.6/foodflip/insertentry.php", params,
                     new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
