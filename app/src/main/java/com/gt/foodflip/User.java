@@ -8,7 +8,6 @@ public class User {
     private String karma;
 
     public User() {
-
     }
 
     public String getId() {
@@ -25,5 +24,10 @@ public class User {
 
     public void setKarma(String karma) {
         this.karma = karma;
+    }
+
+    public boolean isSet() {
+        return this.getId() != null && !this.getId().equals("") &&
+                this.getKarma() != null && !this.getKarma().equals("");
     }
 }

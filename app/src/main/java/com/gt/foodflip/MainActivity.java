@@ -1,7 +1,9 @@
 package com.gt.foodflip;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -35,7 +37,9 @@ public class MainActivity extends ActionBarActivity {
     ImageButton main_screen_submit;
     static User currentUser = new User();
     ProgressDialog pDialog;
+    public static final String MyPREFERENCES = "MyPrefs";
 
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +81,21 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Right now this prints out the current user... mainly as a sanity check to make sure the
-     * user is set.
+     * Sets shared preferences for other views to get data such as account info.
      */
-    public void checkCurrentUser() {
-        System.out.println("in check current user: " + currentUser.getId());
+    public void setSharedPreferences() {
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        if (!currentUser.isSet())
+            return;
+
+        if (!sharedPreferences.getString("id", "-1").equals("-1"))
+            return;
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("id", currentUser.getId());
+        editor.putString("karma", currentUser.getKarma());
+        editor.commit();
     }
 
     @Override
@@ -137,8 +151,7 @@ public class MainActivity extends ActionBarActivity {
             System.out.println("JSONException in getUser: " + e.getMessage());
         }
 
-        return currentUser.getId() != null && !currentUser.getId().equals("") &&
-                currentUser.getKarma() != null && !currentUser.getKarma().equals("");
+        return currentUser.isSet();
     }
 
     /**
@@ -214,7 +227,7 @@ public class MainActivity extends ActionBarActivity {
                 return;
 
             dismissProgressDialog();
-            checkCurrentUser();
+            setSharedPreferences();
         }
 
     }

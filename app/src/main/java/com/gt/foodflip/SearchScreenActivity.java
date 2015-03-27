@@ -2,7 +2,9 @@ package com.gt.foodflip;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +37,8 @@ public class SearchScreenActivity extends Activity {
     CustomAdapter customAdapter;
     public SearchScreenActivity customListView;
     ProgressDialog pDialog;
+    SharedPreferences sharedPreferences;
+    public static final String MyPREFERENCES = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,10 @@ public class SearchScreenActivity extends Activity {
 
         back_button_search_form.setOnClickListener(mainScreen);
         new PopulateFoodEntries(pDialog).execute();
+
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        System.out.println("Shared preferences for id: " + sharedPreferences.getString("id", "-1"));
     }
 
     /*
