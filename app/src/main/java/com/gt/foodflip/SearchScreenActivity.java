@@ -166,7 +166,8 @@ public class SearchScreenActivity extends Activity {
                 @Override
                 public void run() {
                     Resources resources = getResources();
-                    customAdapter = new CustomAdapter(customListView, httpResponse, resources);
+                    customAdapter = new CustomAdapter(customListView, httpResponse, resources,
+                            SearchScreenActivity.this);
                     listView.setAdapter(customAdapter);
                 }
             });
