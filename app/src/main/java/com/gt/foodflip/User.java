@@ -27,7 +27,7 @@ public class User {
     }
 
     public boolean isSet() {
-        return this.getId() != null && !this.getId().equals("") &&
-                this.getKarma() != null && !this.getKarma().equals("");
+        return this.id != null && !this.id.equals("") &&
+                this.karma != null && !this.karma.equals("");
     }
 }

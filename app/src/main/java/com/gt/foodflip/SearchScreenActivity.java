@@ -79,6 +79,7 @@ public class SearchScreenActivity extends Activity {
                 entry.setType(obj.getString("foodType"));
                 entry.setDescription(obj.getString("foodDescription"));
                 entry.setVotes(Integer.parseInt(obj.getString("votes")));
+                entry.setId(Integer.parseInt(obj.getString("id")));
                 httpResponse.add(entry);
             }
         } catch (ClientProtocolException e) {
@@ -118,6 +119,7 @@ public class SearchScreenActivity extends Activity {
         entryScreen.putExtra("type", entry.getType());
         entryScreen.putExtra("description", entry.getDescription());
         entryScreen.putExtra("votes", entry.getVotes());
+        entryScreen.putExtra("id", entry.getId());
 
         startActivity(entryScreen);
     }

@@ -18,6 +18,27 @@ class FFDB_Functions {
     }
 	
 	/**
+	 * Get entry comments
+	 */
+	public function getEntryComments($id) {
+		$result = mysql_query("SELECT * FROM food_entry_comments WHERE id = '$id'");
+		return $result;
+	}
+	
+	/**
+	 * Add a comment to an entry
+	 */
+	public function addEntryComment($id, $comment) {
+		$result = mysql_query("INSERT INTO food_entry_comments(id, comment) VALUES ('$id', '$comment')");
+		
+		if ($result) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Get user
 	 */
 	public function getUser($id) {

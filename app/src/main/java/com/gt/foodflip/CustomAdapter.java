@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -114,7 +113,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
             /* Set Item Click Listener for LayoutInflater for each row */
             view.setOnClickListener(new OnItemClickListener(position));
-            view.setOnTouchListener(new OnSwipeTouchListener(view.getContext()) {
+            /* view.setOnTouchListener(new OnSwipeTouchListener(view.getContext()) {
                 @Override
                 public void onSwipeRight() {
                     Toast.makeText(context, "right", Toast.LENGTH_SHORT).show();
@@ -124,7 +123,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
                 public void onSwipeLeft() {
                     Toast.makeText(context, "left", Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
 
             /* Set onClickListeners for downvote and upvote buttons */
             holder.downvote.setOnClickListener(new OnDownvoteClickListener(holder.votes));
