@@ -1,22 +1,28 @@
 package com.gt.foodflip;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +36,9 @@ public class SearchScreenActivity extends Activity {
     ArrayList<FoodEntry> httpResponse;
     CustomAdapter customAdapter;
     public SearchScreenActivity customListView;
+    ProgressDialog pDialog;
+    SharedPreferences sharedPreferences;
+    public static final String MyPREFERENCES = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +52,11 @@ public class SearchScreenActivity extends Activity {
         account_button_search_form = (ImageButton) findViewById(R.id.account_button_search_form);
 
         back_button_search_form.setOnClickListener(mainScreen);
-        getFoodEntries();
+        new PopulateFoodEntries().execute();
 
-        Resources resources = getResources();
-        customAdapter = new CustomAdapter(customListView, httpResponse, resources);
-        listView.setAdapter(customAdapter);
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        System.out.println("Shared preferences for id: " + sharedPreferences.getString("id", "-1"));
     }
 
     /*
@@ -55,54 +64,31 @@ public class SearchScreenActivity extends Activity {
      * the php script getentries, which returns all food entries in the database.
      */
     public void getFoodEntries() {
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        // Http Request Params Object
-        RequestParams params = new RequestParams();
-
-        // Make Http call to insertentry.php
-        client.post("http://192.168.1.6/foodflip/getentries.php", params,
-                new AsyncHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        final FoodEntry entry = new FoodEntry();
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        entry.setBuilding(obj.getString("building"));
-                        entry.setLocation(obj.getString("location"));
-                        entry.setCategory(obj.getString("foodCategory"));
-                        entry.setType(obj.getString("foodType"));
-                        entry.setDescription(obj.getString("foodDescription"));
-                        entry.setVotes(Integer.parseInt(obj.getString("votes")));
-                        httpResponse.add(entry);
-                    }
-                } catch (JSONException e) {
-                    System.out.println("Error parsing food entry data: " + e.getMessage());
-                    return;
-                }
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://192.168.1.6/foodflip/getentries.php");
+        try {
+            HttpResponse response = httpclient.execute(httppost);
+            String result = EntityUtils.toString(response.getEntity());
+            JSONArray jsonArray = new JSONArray(result);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                final FoodEntry entry = new FoodEntry();
+                JSONObject obj = jsonArray.getJSONObject(i);
+                entry.setBuilding(obj.getString("building"));
+                entry.setLocation(obj.getString("location"));
+                entry.setCategory(obj.getString("foodCategory"));
+                entry.setType(obj.getString("foodType"));
+                entry.setDescription(obj.getString("foodDescription"));
+                entry.setVotes(Integer.parseInt(obj.getString("votes")));
+                entry.setId(Integer.parseInt(obj.getString("id")));
+                httpResponse.add(entry);
             }
-
-            // When error occured
-            @Override
-            public void onFailure(int statusCode, Throwable error, String content) {
-                System.out.println("failure.");
-                if (statusCode == 404) {
-                    Toast.makeText(getApplicationContext(), "Requested resource not found",
-                            Toast.LENGTH_LONG).show();
-                } else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server end",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most " +
-                            "common Error: Device might not be connected to Internet]",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-
-        });
+        } catch (ClientProtocolException e) {
+            System.out.println("ClientProtocolException in getFoodEntries: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException in getFoodEntries: " + e.getMessage());
+        } catch (JSONException e) {
+            System.out.println("JSONException in getFoodEntries: " + e.getMessage());
+        }
     }
 
     /*
@@ -119,11 +105,11 @@ public class SearchScreenActivity extends Activity {
     *  This method gets the specific food entry from the arrayList httpResponse,
     *  then takes us to that entries page.
     *
-    *  @param mPosition position of the clicked food entry in the httpResponse arrayList.
+    *  @param position position of the clicked food entry in the httpResponse arrayList.
     */
-    public void onItemClick(int mPosition)
+    public void onItemClick(int position)
     {
-        final FoodEntry entry = httpResponse.get(mPosition);
+        final FoodEntry entry = httpResponse.get(position);
 
         Intent entryScreen = new Intent(getApplicationContext(), EntryScreenActivity.class);
 
@@ -133,8 +119,65 @@ public class SearchScreenActivity extends Activity {
         entryScreen.putExtra("type", entry.getType());
         entryScreen.putExtra("description", entry.getDescription());
         entryScreen.putExtra("votes", entry.getVotes());
+        entryScreen.putExtra("id", entry.getId());
 
         startActivity(entryScreen);
     }
 
+    private void showProgressDialog() {
+        if (pDialog == null) {
+            pDialog = new ProgressDialog(SearchScreenActivity.this);
+            pDialog.setMessage("Loading. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+        }
+        pDialog.show();
+    }
+
+    private void dismissProgressDialog() {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
+    }
+
+
+    /**
+     * Shows a loading progress dialog while populating the food entries.
+     */
+    public class PopulateFoodEntries extends AsyncTask<Void, Void, Void> {
+        public PopulateFoodEntries() {
+        }
+
+        public void onPreExecute() {
+            showProgressDialog();
+        }
+
+        public Void doInBackground(Void... unused) {
+            getFoodEntries();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Resources resources = getResources();
+                    customAdapter = new CustomAdapter(customListView, httpResponse, resources,
+                            SearchScreenActivity.this);
+                    listView.setAdapter(customAdapter);
+                }
+            });
+            return null;
+        }
+
+        public void onPostExecute(Void unused) {
+            if (SearchScreenActivity.this.isDestroyed())
+                return;
+
+            dismissProgressDialog();
+        }
+    }
 }

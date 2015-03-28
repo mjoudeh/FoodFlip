@@ -21,6 +21,20 @@
 	* id (varchar(255))
 	* karma (int)
 
-7. In **SubmitScreenActivity** and **SearchScreenActivity** change the *client.post* IP address to the address of your local machine.
+7. In **MainActivity**, **SubmitScreenActivity**, and **SearchScreenActivity** change the *client.post* IP address to the address of your local machine. There are 2 *client.post*'s in MainActivity and 1 in each of the other classes.
 8. Create a folder in xampp/htdocs named *foodflip* and copy the contents of the php folder to xampp/htdocs/foodflip.
+9. In XAMPP click on *Shell*.
+10. In the bash that opens up, type *mysql -u root -p*. When it asks for a password, just press ENTER.
+11. You should now see 'mysql>' on the left. Type the following, pressing ENTER after each input:
+
+	* use mysql;
+	* UPDATE mysql.user
+	* SET Password=PASSWORD("admin")
+	* WHERE User="root";
+	* FLUSH PRIVILEGES;
+	* exit
+	
+12. Back in XAMPP click on *Config* for *Apache*, then click *phpMyAdmin (config.inc.php)*.
+13. Find the line that says "$cfg['Servers'][$i]['password'] = '';" and change it to "$cfg['Servers'][$i]['password'] = 'admin';".
+	
 

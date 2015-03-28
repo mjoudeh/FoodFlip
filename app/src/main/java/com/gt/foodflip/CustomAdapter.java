@@ -18,6 +18,7 @@ import java.util.ArrayList;
  * custom layouts.
  */
 public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
+    Context context;
     private Activity activity;
     private ArrayList data;
     private static LayoutInflater inflater = null;
@@ -32,14 +33,12 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
      * @param a the current Activity.
      * @param d the arrayList being passed in (contains all food entries).
      */
-    public CustomAdapter(Activity a, ArrayList d, Resources resLocal) {
-
-        /********** Take passed values **********/
+    public CustomAdapter(Activity a, ArrayList d, Resources resLocal, Context c) {
         activity = a;
         data = d;
         res = resLocal;
+        context = c;
 
-        /*  Layout inflator to call external xml layout () */
         inflater = (LayoutInflater) activity.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -47,9 +46,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
     /* Calculates the size of the passed in arrayList */
     public int getCount() {
-        if(data.size() <= 0)
-            return 1;
-        return data.size();
+        return data.size() <= 0 ? 1 : data.size();
     }
 
     public Object getItem(int position) {
@@ -75,28 +72,27 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
     /* Depends upon data size called for each row , Create each ListView row */
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View vi = convertView;
+        View view = convertView;
         //ViewHolder holder;
 
         if (convertView == null) {
-
             /* Inflate tabitem.xml file for each row ( Defined below ) */
-            vi = inflater.inflate(R.layout.tabitem, null);
+            view = inflater.inflate(R.layout.tabitem, null);
 
             /* View Holder Object to contain tabitem.xml file elements */
             holder = new ViewHolder();
-            holder.building = (TextView) vi.findViewById(R.id.building);
-            holder.location = (TextView) vi.findViewById(R.id.location);
-            holder.foodCategory = (TextView) vi.findViewById(R.id.food_category);
-            holder.foodType = (TextView) vi.findViewById(R.id.food_type);
-            holder.votes = (TextView) vi.findViewById(R.id.votes);
+            holder.building = (TextView) view.findViewById(R.id.building);
+            holder.location = (TextView) view.findViewById(R.id.location);
+            holder.foodCategory = (TextView) view.findViewById(R.id.food_category);
+            holder.foodType = (TextView) view.findViewById(R.id.food_type);
+            holder.votes = (TextView) view.findViewById(R.id.votes);
             //holder.foodDescription = (TextView) vi.findViewById(R.id.food_description);
 
             /*  Set holder with LayoutInflater */
-            vi.setTag(holder);
+            view.setTag(holder);
         }
         else
-            holder = (ViewHolder) vi.getTag();
+            holder = (ViewHolder) view.getTag();
 
         if (data.size() <= 0)
             holder.building.setText("No Data");
@@ -111,18 +107,29 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder.foodCategory.setText(tempValues.getCategory());
             holder.foodType.setText(tempValues.getType());
             holder.votes.setText(Integer.toString(tempValues.getVotes()));
-            holder.downvote = (ImageButton) vi.findViewById(R.id.downvote);
-            holder.upvote = (ImageButton) vi.findViewById(R.id.upvote);
+            holder.downvote = (ImageButton) view.findViewById(R.id.downvote);
+            holder.upvote = (ImageButton) view.findViewById(R.id.upvote);
             //holder.foodDescription.setText(tempValues.getDescription());
 
             /* Set Item Click Listener for LayoutInflater for each row */
-            vi.setOnClickListener(new OnItemClickListener(position));
+            view.setOnClickListener(new OnItemClickListener(position));
+            /* view.setOnTouchListener(new OnSwipeTouchListener(view.getContext()) {
+                @Override
+                public void onSwipeRight() {
+                    Toast.makeText(context, "right", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onSwipeLeft() {
+                    Toast.makeText(context, "left", Toast.LENGTH_SHORT).show();
+                }
+            });*/
 
             /* Set onClickListeners for downvote and upvote buttons */
             holder.downvote.setOnClickListener(new OnDownvoteClickListener(holder.votes));
             holder.upvote.setOnClickListener(new OnUpvoteClickListener(holder.votes));
         }
-        return vi;
+        return view;
     }
 
     @Override
@@ -174,10 +181,8 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
         @Override
         public void onClick(View arg0) {
-            SearchScreenActivity sct = (SearchScreenActivity) activity;
-
-            /****  Call  onItemClick Method inside CustomListViewAndroidExample Class ( See Below )****/
-            sct.onItemClick(mPosition);
+            SearchScreenActivity searchScreenActivity = (SearchScreenActivity) activity;
+            searchScreenActivity.onItemClick(mPosition);
         }
     }
 }

@@ -1,6 +1,10 @@
 package com.gt.foodflip;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
@@ -8,16 +12,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONArray;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -26,8 +35,11 @@ import java.util.UUID;
 public class MainActivity extends ActionBarActivity {
     ImageButton main_screen_search;
     ImageButton main_screen_submit;
-    static String userArray[] = new String[2];
+    static User currentUser = new User();
+    ProgressDialog pDialog;
+    public static final String MyPREFERENCES = "MyPrefs";
 
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +50,18 @@ public class MainActivity extends ActionBarActivity {
         main_screen_search.setOnClickListener(searchScreen);
         main_screen_submit.setOnClickListener(submitScreen);
 
-        /*
-         * The following lines of code are used to get a unique Id for each device. This will
-         * be useful for creating and managing user accounts
-         */
+        String deviceId = getUniqueId();
+        new SetCurrentUser(deviceId).execute();
+    }
+
+    /**
+     * Creates a unique Id for a user.
+     *
+     * @return - the unique Id of the user.
+     */
+    public String getUniqueId() {
         final TelephonyManager tm = (TelephonyManager) getBaseContext().
-                getSystemService(this.TELEPHONY_SERVICE);
+                getSystemService(TELEPHONY_SERVICE);
 
         final String tmDevice, tmSerial, androidId;
         tmDevice = "" + tm.getDeviceId();
@@ -53,37 +71,36 @@ public class MainActivity extends ActionBarActivity {
 
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) |
                 tmSerial.hashCode());
-        String deviceId = deviceUuid.toString();
-
-        getUser(deviceId);
-
-        if (userArray[0] == null)
-            insertUser(deviceId);
-        else
-            System.out.println(userArray[0]);
+        return deviceUuid.toString();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    /**
+     * Sets shared preferences for other views to get data such as account info.
+     */
+    public void setSharedPreferences() {
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        if (!currentUser.isSet())
+            return;
+
+        if (!sharedPreferences.getString("id", "-1").equals("-1"))
+            return;
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("id", currentUser.getId());
+        editor.putString("karma", currentUser.getKarma());
+        editor.apply();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     /*
@@ -106,79 +123,108 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
-    public String[] getUser(String deviceId) {
-        // Create AsycHttpClient object
-        AsyncHttpClient client = new AsyncHttpClient();
+    /**
+     * Gets a unique user from the database and stores them in currentUser.
+     *
+     * @param deviceId - the unique id of the user.
+     * @return true - if the user was retrieved successfully, false otherwise.
+     */
+    public boolean getUser(String deviceId) {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://192.168.1.6/foodflip/getuser.php");
 
-        // Http Request Params Object
-        RequestParams params = new RequestParams();
+        try {
+            List<BasicNameValuePair> nameValuePairs = new ArrayList<>();
+            nameValuePairs.add(new BasicNameValuePair("id", deviceId));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+            String result = EntityUtils.toString(response.getEntity());
+            JSONObject user = new JSONObject(result);
+            currentUser.setId(user.getString("id"));
+            currentUser.setKarma(user.getString("karma"));
+        } catch (ClientProtocolException e) {
+            System.out.println("ClientProtocolException in getUser: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException in getUser: " + e.getMessage());
+        } catch (JSONException e) {
+            System.out.println("JSONException in getUser: " + e.getMessage());
+        }
 
-        params.put("id", deviceId);
-        // Make Http call to insertentry.php
-        client.post("http://192.168.1.6/foodflip/getuser.php", params,
-            new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    JSONObject obj = jsonArray.getJSONObject(0);
-                    userArray[0] = obj.getString("id");
-                    userArray[1] = obj.getString("karma");
-                } catch (JSONException e) {
-                    System.out.println("Error parsing getUser data: " + e.getMessage());
-                    return;
-                }
-            }
-            // When error occured
-            @Override
-            public void onFailure(int statusCode, Throwable error, String content) {
-                if (statusCode == 404)
-                    Toast.makeText(getApplicationContext(), "Requested resource not found",
-                            Toast.LENGTH_LONG).show();
-                else if (statusCode == 500)
-                    Toast.makeText(getApplicationContext(),
-                            "Something went wrong at server end", Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured!" +
-                                    " [Most common Error: Device might not be connected" +
-                                    " to Internet]",
-                            Toast.LENGTH_LONG).show();
-            }
-        });
-
-        return userArray;
+        return currentUser.isSet();
     }
 
+    /**
+     * Inserts a new user into the database.
+     *
+     * @param deviceId - the unique id of the user.
+     */
     public void insertUser(String deviceId) {
-        // Create AsycHttpClient object
-        AsyncHttpClient client = new AsyncHttpClient();
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://192.168.1.6/foodflip/insertuser.php");
+        try {
+            List<BasicNameValuePair> nameValuePairs = new ArrayList<>();
+            nameValuePairs.add(new BasicNameValuePair("id", deviceId));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httpclient.execute(httppost);
+            currentUser.setId(deviceId);
+            currentUser.setKarma("0");
+        } catch (ClientProtocolException e) {
+            System.out.println("ClientProtocolException in insertUser: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException in insertUser: " + e.getMessage());
+        }
+    }
 
-        // Http Request Params Object
-        RequestParams params = new RequestParams();
+    private void showProgressDialog() {
+        if (pDialog == null) {
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setMessage("Loading. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+        }
+        pDialog.show();
+    }
 
-        params.put("id", deviceId);
-        // Make Http call to insertentry.php
-        client.post("http://192.168.1.6/foodflip/insertuser.php", params,
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(String response) {
-                        System.out.println(response);
-                    }
-                    // When error occured
-                    @Override
-                    public void onFailure(int statusCode, Throwable error, String content) {
-                        if (statusCode == 404)
-                            Toast.makeText(getApplicationContext(), "Requested resource not found",
-                                    Toast.LENGTH_LONG).show();
-                        else if (statusCode == 500)
-                            Toast.makeText(getApplicationContext(),
-                                    "Something went wrong at server end", Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(getApplicationContext(), "Unexpected Error occcured!" +
-                                            " [Most common Error: Device might not be connected" +
-                                            " to Internet]",
-                                    Toast.LENGTH_LONG).show();
-                    }
-                });
+    private void dismissProgressDialog() {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
+    }
+
+    /**
+     * This class is responsible for displaying the loading dialog while making a call to the
+     * server to get the user's profile.
+     */
+    public class SetCurrentUser extends AsyncTask<Void, Void, Void> {
+        private String deviceId;
+
+        public SetCurrentUser(String deviceId) {
+            this.deviceId = deviceId;
+        }
+
+        public void onPreExecute() {
+            showProgressDialog();
+        }
+
+        public Void doInBackground(Void... unused) {
+            if (!getUser(this.deviceId))
+                insertUser(this.deviceId);
+            return null;
+        }
+
+        public void onPostExecute(Void unused) {
+            if (MainActivity.this.isDestroyed())
+                return;
+
+            dismissProgressDialog();
+            setSharedPreferences();
+        }
+
     }
 }

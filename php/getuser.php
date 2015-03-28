@@ -2,12 +2,11 @@
     include_once 'ffdb_functions.php';
 	if(isset($_POST["id"]) && !empty($_POST["id"])) {
 		$ffdb = new FFDB_Functions();
-		$id = $_POST["id"];
-		$user = $ffdb->getUser($id);
+		$user = $ffdb->getUser($_POST["id"]);
 		$a = array();
-		if ($user != false) {
-			$a["id"] = $user["id"];
-			$a["karma"] = $user["karma"];
+		if ($user != false && $row = mysql_fetch_array($user)) {
+			$a["id"] = $row["id"];
+			$a["karma"] = $row["karma"];
 			echo json_encode($a);
 		} else { ?>
 		 <div id="msg">user is false in getuser.php</div>

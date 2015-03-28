@@ -10,6 +10,7 @@ public class FoodEntry {
     private String type = "";
     private String description = "";
     private int votes;
+    private int id;
 
     /* Setters */
     public void setBuilding(String building)
@@ -39,6 +40,10 @@ public class FoodEntry {
         this.votes = votes;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     /* Getters */
     public String getBuilding()
     {
@@ -65,5 +70,9 @@ public class FoodEntry {
 
     public int getVotes() {
         return this.votes;
+    }
+
+    public int getId() {
+        return this.id;
     }
 }
